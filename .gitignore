@@ -1,0 +1,39 @@
+# Dependencies
+**/node_modules/
+
+# Build output
+**/dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# AWS / deployment artifacts
+*.zip
+
+# Local/runtime files
+coverage/
+.cache/
+.turbo/
+
+# TypeScript incremental files
+*.tsbuildinfo
