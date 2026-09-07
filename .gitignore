@@ -37,3 +37,6 @@ coverage/
 
 # TypeScript incremental files
 *.tsbuildinfo
+
+# AWS migration data — never commit production data
+aws-migration/
