@@ -22,9 +22,9 @@ blogPostRouter.get(
 );
 
 blogPostRouter.get(
-  '/:id',
-  validate(blogPostIdSchema),
-  blogPostController.get.bind(blogPostController),
+  '/:slug',
+  validate(blogPostSlugSchema),
+  blogPostController.getBySlug.bind(blogPostController),
 );
 
 blogPostRouter.post(

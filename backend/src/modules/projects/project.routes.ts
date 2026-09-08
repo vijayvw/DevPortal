@@ -22,9 +22,9 @@ projectRouter.get(
 );
 
 projectRouter.get(
-  '/:id',
-  validate(projectIdSchema),
-  projectController.get.bind(projectController),
+  '/:slug',
+  validate(projectSlugSchema),
+  projectController.getBySlug.bind(projectController),
 );
 
 projectRouter.post(

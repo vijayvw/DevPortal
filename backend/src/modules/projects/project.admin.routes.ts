@@ -81,6 +81,32 @@ projectAdminRouter.patch(
   },
 );
 
+projectAdminRouter.patch(
+  '/:id/status',
+  async (req, res, next) => {
+    try {
+      const { publishStatus } = req.body ?? {};
+
+      if (!['DRAFT', 'PUBLISHED', 'SCHEDULED'].includes(publishStatus)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid publishStatus',
+        });
+      }
+
+      return ApiResponse.success(
+        res,
+        await projectService.updateStatus(
+          req.params.id,
+          publishStatus,
+        ),
+      );
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 projectAdminRouter.delete(
   '/:id',
   validate(projectIdSchema),

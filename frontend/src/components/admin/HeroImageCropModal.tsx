@@ -16,20 +16,21 @@ export default function HeroImageCropModal({
 }: HeroImageCropModalProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
+  const [croppedAreaPixels, setCroppedAreaPixels] =
+    useState<Area | null>(null);
 
   const onCropComplete = useCallback(
-  (_: Area, croppedPixels: Area) => {
-    console.log("Crop Pixels:", croppedPixels);
-    setCroppedAreaPixels(croppedPixels);
-  },
-  []
-);
+    (_: Area, croppedPixels: Area) => {
+      setCroppedAreaPixels(croppedPixels);
+    },
+    [],
+  );
+
   useEffect(() => {
     if (open) {
       setCrop({ x: 0, y: 0 });
       setZoom(1);
-      setCroppedAreaPixels(undefined);
+      setCroppedAreaPixels(null);
     }
   }, [image, open]);
 
@@ -51,7 +52,7 @@ export default function HeroImageCropModal({
             cropShape="rect"
             showGrid
             objectFit="horizontal-cover"
-            restrictPosition={true}
+            restrictPosition
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onCropComplete={onCropComplete}
@@ -76,6 +77,7 @@ export default function HeroImageCropModal({
 
         <div className="flex justify-end gap-3 mt-6">
           <button
+            type="button"
             onClick={onCancel}
             className="px-4 py-2 rounded border"
           >
@@ -83,12 +85,14 @@ export default function HeroImageCropModal({
           </button>
 
           <button
+            type="button"
+            disabled={!croppedAreaPixels}
             onClick={() => {
               if (croppedAreaPixels) {
                 onApply(croppedAreaPixels);
               }
             }}
-            className="px-4 py-2 rounded bg-blue-600 text-white"
+            className="px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Apply Crop
           </button>

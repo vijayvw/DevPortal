@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { uploadMedia } from "../../../api/services/media.service";
 
 interface Props {
   value?: string;
+  imageUrl?: string | null;
   onChange: (mediaId: string) => void;
 }
 
 export default function ImageUploader({
   value,
+  imageUrl,
   onChange,
 }: Props) {
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    setPreview(null);
+  }, [value, imageUrl]);
 
   async function handleFile(
     e: React.ChangeEvent<HTMLInputElement>
@@ -20,34 +26,36 @@ export default function ImageUploader({
 
     if (!file) return;
 
-    setPreview(URL.createObjectURL(file));
+    const localPreview = URL.createObjectURL(file);
+    setPreview(localPreview);
 
     setUploading(true);
 
     try {
       const media = await uploadMedia(file, "projects");
-
       onChange(media.id);
     } finally {
       setUploading(false);
     }
   }
 
+  const displayImage = preview || imageUrl;
+
   return (
     <div className="space-y-3">
-      <label className="block text-white font-medium">
+      <label className="block font-medium text-white">
         Cover Image
       </label>
 
-      {preview && (
+      {displayImage && (
         <img
-          src={preview}
-          alt="Preview"
+          src={displayImage}
+          alt="Project cover"
           className="h-48 w-full rounded-lg object-cover"
         />
       )}
 
-      {!preview && value && (
+      {!displayImage && value && (
         <p className="text-sm text-green-400">
           Existing image attached
         </p>

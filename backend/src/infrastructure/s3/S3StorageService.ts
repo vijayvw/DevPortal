@@ -7,14 +7,6 @@ import { config } from '../../config';
 
 const s3 = new S3Client({
   region: config.aws.region,
-  ...(config.aws.accessKeyId && config.aws.secretAccessKey
-    ? {
-        credentials: {
-          accessKeyId: config.aws.accessKeyId,
-          secretAccessKey: config.aws.secretAccessKey,
-        },
-      }
-    : {}),
 });
 
 function getBucket(): string {

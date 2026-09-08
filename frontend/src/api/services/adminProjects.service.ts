@@ -6,18 +6,32 @@ export interface AdminProject {
   title: string;
   slug: string;
   category: string;
-  difficulty: string;
+  difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+  status: string;
   publishStatus: string;
   featured: boolean;
   pinned: boolean;
+
+  shortDescription?: string;
+  description?: string;
+  longDescription?: string;
+
+  technologyIds?: string[];
+
+  coverImageId?: string;
+  coverImageUrl?: string;
+
+  githubUrl?: string;
+  liveUrl?: string;
+  videoUrl?: string;
 }
 
 export async function getAdminProjects() {
-  const response = await apiClient.get<ApiEnvelope<AdminProject[]>>(
+  const response = await apiClient.get<ApiEnvelope<{ items: AdminProject[]; meta: any }>>(
     "/admin/projects"
   );
 
-  return response.data.data;
+  return response.data.data.items;
 }
 
 export interface CreateProjectRequest {
@@ -57,18 +71,30 @@ export async function createProject(
 }
 
 export async function getAdminProject(id: string) {
-  const response = await apiClient.get<ApiEnvelope<any>>(
+  const response = await apiClient.get<ApiEnvelope<AdminProject>>(
     `/admin/projects/${id}`
   );
 
-  return response.data.data;
+  const project = response.data.data;
+
+  return {
+    ...project,
+    longDescription:
+      project.longDescription ??
+      project.description ??
+      "",
+    technologyIds: Array.isArray(project.technologyIds)
+      ? project.technologyIds
+      : [],
+    coverImageId: project.coverImageId ?? "",
+  };
 }
 
 export async function updateProject(
   id: string,
   data: Partial<CreateProjectRequest>
 ) {
-  const response = await apiClient.put(
+  const response = await apiClient.patch(
     `/admin/projects/${id}`,
     data
   );

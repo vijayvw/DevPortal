@@ -15,6 +15,18 @@ import type { ApiEnvelope } from './types';
 });
 
 apiClient.interceptors.request.use((config) => {
+  if (typeof FormData !== "undefined" && config.data instanceof FormData) {
+    if (config.headers) {
+      delete config.headers["Content-Type"];
+      delete config.headers["content-type"];
+    }
+  }
+
+  return config;
+});
+
+
+apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
 
   if (token) {

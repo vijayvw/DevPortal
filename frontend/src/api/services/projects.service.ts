@@ -13,8 +13,14 @@ export interface ListProjectsParams {
 export async function getProjects(
   params: ListProjectsParams = {}
 ): Promise<ApiResult<ProjectListItemDto[]>> {
-  const response = await apiClient.get<ApiEnvelope<ProjectListItemDto[]>>('/projects', { params });
-  return { data: response.data.data, meta: response.data.meta };
+  const response = await apiClient.get<
+    ApiEnvelope<{ items: ProjectListItemDto[]; meta: NonNullable<ApiEnvelope<unknown>['meta']> }>
+  >('/projects', { params });
+
+  return {
+    data: response.data.data.items,
+    meta: response.data.data.meta,
+  };
 }
 
 export async function getProjectBySlug(slug: string): Promise<ProjectDetailDto> {

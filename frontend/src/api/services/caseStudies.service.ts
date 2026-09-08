@@ -11,8 +11,14 @@ export interface ListCaseStudiesParams {
 export async function getCaseStudies(
   params: ListCaseStudiesParams = {}
 ): Promise<ApiResult<CaseStudyListItemDto[]>> {
-  const response = await apiClient.get<ApiEnvelope<CaseStudyListItemDto[]>>('/case-studies', { params });
-  return { data: response.data.data, meta: response.data.meta };
+  const response = await apiClient.get<
+    ApiEnvelope<{ items: CaseStudyListItemDto[]; meta: NonNullable<ApiEnvelope<unknown>['meta']> }>
+  >('/case-studies', { params });
+
+  return {
+    data: response.data.data.items,
+    meta: response.data.data.meta,
+  };
 }
 
 export async function getCaseStudyById(id: string): Promise<CaseStudyDetailDto> {

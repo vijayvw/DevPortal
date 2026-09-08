@@ -4,11 +4,20 @@ const projectFields = {
   title: z.string().min(1).max(200),
   slug: z.string().min(1).max(200),
   shortDescription: z.string().optional(),
+
+  // Frontend uses longDescription; backend keeps legacy
+  // description compatibility for existing DynamoDB records.
+  longDescription: z.string().optional(),
   description: z.string().optional(),
+
   status: z.string().optional(),
   difficulty: z.string().optional(),
   category: z.string().optional(),
   tags: z.array(z.string()).optional(),
+
+  // Project technologies are stored as technology IDs.
+  technologyIds: z.array(z.string()).optional(),
+
   githubUrl: z.string().url().optional().or(z.literal('')),
   liveUrl: z.string().url().optional().or(z.literal('')),
   videoUrl: z.string().url().optional().or(z.literal('')),

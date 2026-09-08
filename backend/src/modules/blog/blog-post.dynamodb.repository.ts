@@ -1,6 +1,7 @@
 import {
   GetCommand,
   PutCommand,
+  QueryCommand,
   ScanCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
@@ -53,17 +54,39 @@ export class BlogPostDynamoDBRepository {
   }
 
   async findBySlug(slug: string): Promise<BlogPost | null> {
-    const result = await dynamoDb.send(
-      new ScanCommand({
+    // Current schema: GSI2PK = slug, GSI2SK = post id.
+    const currentResult = await dynamoDb.send(
+      new QueryCommand({
         TableName: config.aws.tableName,
-        FilterExpression: 'GSI2PK = :slug',
+        IndexName: 'GSI2',
+        KeyConditionExpression: 'GSI2PK = :pk',
         ExpressionAttributeValues: {
-          ':slug': slug,
+          ':pk': slug,
         },
+        Limit: 1,
       }),
     );
 
-    return (result.Items?.[0] as BlogPost | undefined) ?? null;
+    if (currentResult.Items?.[0]) {
+      return currentResult.Items[0] as BlogPost;
+    }
+
+    // Legacy migrated schema:
+    // GSI2PK = BLOGPOST_SLUG#slug, GSI2SK = POST.
+    const legacyResult = await dynamoDb.send(
+      new QueryCommand({
+        TableName: config.aws.tableName,
+        IndexName: 'GSI2',
+        KeyConditionExpression: 'GSI2PK = :pk AND GSI2SK = :sk',
+        ExpressionAttributeValues: {
+          ':pk': `BLOGPOST_SLUG#${slug}`,
+          ':sk': 'POST',
+        },
+        Limit: 1,
+      }),
+    );
+
+    return (legacyResult.Items?.[0] as BlogPost | undefined) ?? null;
   }
 
   async findAll(options: {
@@ -89,6 +112,11 @@ export class BlogPostDynamoDBRepository {
     );
 
     let items = (result.Items ?? []) as BlogPost[];
+
+    // Never return soft-deleted blog posts.
+    items = items.filter(
+      (item: any) => !item.deletedAt,
+    );
 
     if (options.publicOnly) {
       items = items.filter(

@@ -3,14 +3,6 @@ import { config } from '../../config';
 
 const client = new DynamoDBClient({
   region: config.aws.region,
-  ...(config.aws.accessKeyId && config.aws.secretAccessKey
-    ? {
-        credentials: {
-          accessKeyId: config.aws.accessKeyId,
-          secretAccessKey: config.aws.secretAccessKey,
-        },
-      }
-    : {}),
 });
 
 export async function checkDynamoDBHealth(): Promise<boolean> {

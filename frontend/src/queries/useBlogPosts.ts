@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getBlogPostBySlug,
+  viewBlog,
   getBlogPosts,
   likeBlog,
   unlikeBlog,
@@ -54,5 +55,11 @@ export function useUnlikeBlog() {
         queryKey: queryKeys.blogPosts.list({}),
       });
     },
+  });
+}
+
+export function useViewBlog() {
+  return useMutation({
+    mutationFn: (id: string) => viewBlog(id),
   });
 }

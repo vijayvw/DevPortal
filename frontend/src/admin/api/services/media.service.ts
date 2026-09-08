@@ -12,11 +12,11 @@ export interface MediaAsset {
 }
 
 export async function getMediaAssets() {
-  const response = await apiClient.get<ApiEnvelope<MediaAsset[]>>(
+  const response = await apiClient.get<ApiEnvelope<{ items: MediaAsset[]; meta: any }>>(
     "/admin/media"
   );
 
-  return response.data.data;
+  return response.data.data.items;
 }
 
 export async function uploadMedia(file: File) {
@@ -26,11 +26,7 @@ export async function uploadMedia(file: File) {
   const response = await apiClient.post(
     "/admin/media",
     formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+    
   );
 
   return response.data.data;

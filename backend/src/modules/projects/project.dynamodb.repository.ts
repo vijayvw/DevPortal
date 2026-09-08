@@ -2,6 +2,7 @@ import {
   DeleteCommand,
   GetCommand,
   PutCommand,
+  QueryCommand,
   ScanCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
@@ -19,10 +20,12 @@ export interface Project {
   slug: string;
   shortDescription?: string;
   description?: string;
+  longDescription?: string;
   status?: string;
   difficulty?: string;
   category?: string;
   tags?: string[];
+  technologyIds?: string[];
   githubUrl?: string;
   liveUrl?: string;
   videoUrl?: string;
@@ -46,6 +49,7 @@ export interface Project {
   likes?: number;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string;
 }
 
 const PREFIX = 'PROJECT#';
@@ -66,17 +70,39 @@ export class ProjectDynamoDBRepository {
   }
 
   async findBySlug(slug: string): Promise<Project | null> {
-    const result = await dynamoDb.send(
-      new ScanCommand({
+    // Current schema: GSI2PK = slug, GSI2SK = project id.
+    const currentResult = await dynamoDb.send(
+      new QueryCommand({
         TableName: config.aws.tableName,
-        FilterExpression: 'GSI2PK = :slug',
+        IndexName: 'GSI2',
+        KeyConditionExpression: 'GSI2PK = :pk',
         ExpressionAttributeValues: {
-          ':slug': slug,
+          ':pk': slug,
         },
+        Limit: 1,
       }),
     );
 
-    return (result.Items?.[0] as Project | undefined) ?? null;
+    if (currentResult.Items?.[0]) {
+      return currentResult.Items[0] as Project;
+    }
+
+    // Legacy migrated schema:
+    // GSI2PK = PROJECT_SLUG#slug, GSI2SK = PROJECT.
+    const legacyResult = await dynamoDb.send(
+      new QueryCommand({
+        TableName: config.aws.tableName,
+        IndexName: 'GSI2',
+        KeyConditionExpression: 'GSI2PK = :pk AND GSI2SK = :sk',
+        ExpressionAttributeValues: {
+          ':pk': `PROJECT_SLUG#${slug}`,
+          ':sk': 'PROJECT',
+        },
+        Limit: 1,
+      }),
+    );
+
+    return (legacyResult.Items?.[0] as Project | undefined) ?? null;
   }
 
   async findAll(options: {
@@ -102,6 +128,11 @@ export class ProjectDynamoDBRepository {
     );
 
     let items = (result.Items ?? []) as Project[];
+
+    // Soft-deleted projects must not appear in any list.
+    items = items.filter(
+      (item: any) => !item.deletedAt,
+    );
 
     if (options.publicOnly) {
       items = items.filter(

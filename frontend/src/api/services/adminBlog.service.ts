@@ -22,10 +22,10 @@ export interface AdminBlogPost extends AdminBlogPostList {
 
 export async function getAdminBlogPosts() {
   const response = await apiClient.get<
-    ApiEnvelope<AdminBlogPostList[]>
+    ApiEnvelope<{ items: AdminBlogPostList[]; meta: any }>
   >("/admin/blog");
 
-  return response.data.data;
+  return response.data.data.items;
 }
 
 export interface CreateBlogRequest {
@@ -79,7 +79,7 @@ export async function updateBlogPost(
   id: string,
   data: Partial<CreateBlogRequest>
 ) {
-  const response = await apiClient.put(
+  const response = await apiClient.patch(
     `/admin/blog/${id}`,
     data
   );

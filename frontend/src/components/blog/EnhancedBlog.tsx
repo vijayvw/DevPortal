@@ -74,7 +74,7 @@ function toViewModel(dto: BlogPostListItemDto): BlogPostViewModel {
     readTime: `${dto.readTimeMinutes} min read`,
     date: dto.publishedAt ?? '',
     featured: dto.featured,
-    views: dto.views,
+    views: dto.views ?? 0,
     likes: dto.likes,
     comments: dto.commentsCount,
     excerpt: dto.excerpt,
@@ -656,19 +656,6 @@ function BlogPostModalContent({
   }}
 />
 
-        <div className="mt-10 pt-6 border-t border-gray-700">
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1 bg-gray-800 text-green-400 rounded-full text-sm"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-
-        </div>
       </div>
     </div>
   );

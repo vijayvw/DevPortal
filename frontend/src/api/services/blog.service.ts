@@ -14,13 +14,23 @@ export interface ListBlogPostsParams {
 export async function getBlogPosts(
   params: ListBlogPostsParams = {}
 ): Promise<ApiResult<BlogPostListItemDto[]>> {
-  const response = await apiClient.get<ApiEnvelope<BlogPostListItemDto[]>>('/blog', { params });
-  return { data: response.data.data, meta: response.data.meta };
+  const response = await apiClient.get<
+    ApiEnvelope<{ items: BlogPostListItemDto[]; meta: NonNullable<ApiEnvelope<unknown>['meta']> }>
+  >('/blog', { params });
+
+  return {
+    data: response.data.data.items,
+    meta: response.data.data.meta,
+  };
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPostDetailDto> {
   const response = await apiClient.get<ApiEnvelope<BlogPostDetailDto>>(`/blog/${slug}`);
   return response.data.data;
+}
+
+export async function viewBlog(id: string): Promise<void> {
+  await apiClient.post(`/blog/${id}/view`);
 }
 
 export async function likeBlog(slug: string): Promise<void> {

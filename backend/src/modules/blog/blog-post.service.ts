@@ -1,7 +1,27 @@
+import { mediaAssetRepository } from '../media/media-asset.dynamodb.repository';
+
 import { NotFoundError } from '../../common/errors';
 import { blogPostRepository } from './blog-post.dynamodb.repository';
 
 export class BlogPostService {
+  private async attachHeroImage(post: any) {
+    if (!post.heroImageId) {
+      return {
+        ...post,
+        heroImageUrl: null,
+      };
+    }
+
+    const asset = await mediaAssetRepository.findById(post.heroImageId);
+
+    return {
+      ...post,
+      heroImageUrl:
+        asset && !asset.deletedAt
+          ? asset.url
+          : null,
+    };
+  }
   async listPublic(options = {}) {
     return blogPostRepository.findAll({
       ...(options as object),
@@ -19,7 +39,7 @@ export class BlogPostService {
       throw new NotFoundError('Blog post not found');
     }
 
-    return post;
+    return this.attachHeroImage(post);
   }
 
   async getPublicBySlug(slug: string) {
@@ -32,7 +52,7 @@ export class BlogPostService {
       throw new NotFoundError('Blog post not found');
     }
 
-    return post;
+    return this.attachHeroImage(post);
   }
 
   async incrementViews(id: string) {
@@ -61,7 +81,7 @@ export class BlogPostService {
       throw new NotFoundError('Blog post not found');
     }
 
-    return post;
+    return this.attachHeroImage(post);
   }
 
   async create(data: any) {
@@ -76,6 +96,23 @@ export class BlogPostService {
     }
 
     return post;
+  }
+
+  async updateStatus(
+    id: string,
+    publishStatus: 'DRAFT' | 'PUBLISHED' | 'SCHEDULED',
+  ) {
+    const post = await this.getAdmin(id);
+
+    const updates: any = {
+      publishStatus,
+      publishedAt:
+        publishStatus === 'PUBLISHED'
+          ? (post as any).publishedAt ?? new Date().toISOString()
+          : null,
+    };
+
+    return blogPostRepository.update(id, updates);
   }
 
   async delete(id: string) {

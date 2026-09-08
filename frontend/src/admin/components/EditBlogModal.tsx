@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { Area } from "react-easy-crop";
 import { useAdminBlogPost } from "../queries/useAdminBlogPost";
 import { useUpdateBlogPost } from "../queries/useUpdateBlogPost";
+import { useUploadMedia } from "../queries/useUploadMedia";
+import { getCroppedImg } from "@/utils/imageCrop";
 import MediaPickerModal from "./MediaPickerModal";
+import HeroImageCropModal from "../../components/admin/HeroImageCropModal";
 import RichTextEditor, {
   RichTextEditorRef,
 } from "@/components/editor/RichTextEditor";
@@ -17,10 +21,13 @@ export default function EditBlogModal({
 }: Props) {
   const { data, isLoading } = useAdminBlogPost(postId);
   const updateMutation = useUpdateBlogPost();
+  const uploadMutation = useUploadMedia();
 
   const editorRef = useRef<RichTextEditorRef>(null);
 
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [cropImage, setCropImage] = useState("");
 
   const [pickerMode, setPickerMode] = useState<
     "hero" | "editor"
@@ -298,18 +305,52 @@ export default function EditBlogModal({
         onClose={() => setPickerOpen(false)}
         onSelect={(url, id) => {
           if (pickerMode === "hero") {
-            setForm((prev) => ({
-              ...prev,
-              heroImage: url,
-              heroImageId: id,
-            }));
-
+            setCropImage(url);
             setPickerOpen(false);
+            setShowCropModal(true);
             return;
           }
 
           editorRef.current?.insertImage(url);
           setPickerOpen(false);
+        }}
+      />
+
+      <HeroImageCropModal
+        open={showCropModal}
+        image={cropImage}
+        onCancel={() => setShowCropModal(false)}
+        onApply={async (cropArea: Area) => {
+          try {
+            const blob = await getCroppedImg(
+              cropImage,
+              cropArea,
+            );
+
+            const file = new File(
+              [blob],
+              "hero-image.jpg",
+              {
+                type: "image/jpeg",
+              },
+            );
+
+            const media =
+              await uploadMutation.mutateAsync(file);
+
+            setForm((prev) => ({
+              ...prev,
+              heroImage: media.url,
+              heroImageId: media.id,
+            }));
+
+            setShowCropModal(false);
+          } catch (error) {
+            console.error(
+              "Failed to crop/upload hero image:",
+              error,
+            );
+          }
         }}
       />
     </>

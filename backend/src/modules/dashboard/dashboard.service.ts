@@ -23,20 +23,24 @@ export class DashboardService {
       contactMessageRepository.findAll({}),
     ]);
 
+    const unreadContactMessages = messages.items.filter(
+      (message: any) => message.status === 'UNREAD',
+    ).length;
+
     return {
       counts: {
         projects: projects.items.length,
-        blogs: blogs.items.length,
+        blogPosts: blogs.items.length,
         caseStudies: caseStudies.items.length,
         skills: skills.length,
-        technologies: technologies.length,
-        messages: messages.items.length,
+        contactMessages: messages.items.length,
+        unreadContactMessages,
       },
       recent: {
         projects: projects.items.slice(0, 5),
-        blogs: blogs.items.slice(0, 5),
+        blogPosts: blogs.items.slice(0, 5),
         caseStudies: caseStudies.items.slice(0, 5),
-        messages: messages.items.slice(0, 5),
+        contactMessages: messages.items.slice(0, 5),
       },
     };
   }

@@ -63,14 +63,11 @@ export default function EditProjectModal({
   featured: data.featured,
   pinned: data.pinned,
 
-  technologyIds:
-    data.technologies
-      ?.map((name) =>
-        technologies.find((t) => t.name === name)?.id
-      )
-      .filter(Boolean) as string[],
+  technologyIds: Array.isArray(data.technologyIds)
+      ? data.technologyIds
+      : [],
 });
-  }, [data, technologies]);
+  }, [data]);
 
   if (!projectId) return null;
 
@@ -224,6 +221,7 @@ export default function EditProjectModal({
 
               <ImageUploader
                 value={form.coverImageId}
+                imageUrl={data?.coverImageUrl}
                 onChange={(id) =>
                   updateField("coverImageId", id)
                 }

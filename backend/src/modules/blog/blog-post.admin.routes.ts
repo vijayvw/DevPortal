@@ -81,6 +81,32 @@ blogPostAdminRouter.patch(
   },
 );
 
+blogPostAdminRouter.patch(
+  '/:id/status',
+  async (req, res, next) => {
+    try {
+      const { publishStatus } = req.body ?? {};
+
+      if (!['DRAFT', 'PUBLISHED', 'SCHEDULED'].includes(publishStatus)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid publishStatus',
+        });
+      }
+
+      return ApiResponse.success(
+        res,
+        await blogPostService.updateStatus(
+          req.params.id,
+          publishStatus,
+        ),
+      );
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 blogPostAdminRouter.delete(
   '/:id',
   validate(blogPostIdSchema),
