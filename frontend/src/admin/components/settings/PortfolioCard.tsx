@@ -10,6 +10,10 @@ import {
 interface PortfolioForm {
   portfolioTitle: string;
   tagline: string;
+  shortDescription: string;
+  yearsExperience: string;
+  cloudPlatforms: string;
+  technologies: string;
   email: string;
   phone: string;
   address: string;
@@ -28,6 +32,10 @@ export default function PortfolioCard() {
   const [form, setForm] = useState<PortfolioForm>({
     portfolioTitle: "",
     tagline: "",
+    shortDescription: "",
+    yearsExperience: "",
+    cloudPlatforms: "",
+    technologies: "",
     email: "",
     phone: "",
     address: "",
@@ -78,6 +86,14 @@ export default function PortfolioCard() {
             settings?.portfolioTitle ?? "",
           tagline:
             settings?.tagline ?? "",
+          shortDescription:
+            settings?.shortDescription ?? "",
+          yearsExperience:
+            settings?.yearsExperience ?? "",
+          cloudPlatforms:
+            settings?.cloudPlatforms ?? "",
+          technologies:
+            settings?.technologies ?? "",
           email:
             settings?.email ?? "",
           phone:
@@ -145,6 +161,50 @@ export default function PortfolioCard() {
           onChange={handleChange}
           placeholder="Tagline"
           className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
+        />
+
+        <textarea
+          name="shortDescription"
+          value={form.shortDescription}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              shortDescription: e.target.value,
+            }))
+          }
+          placeholder="Short Description"
+          rows={4}
+          className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white md:col-span-2"
+        />
+
+        <input
+          name="yearsExperience"
+          value={form.yearsExperience}
+          onChange={handleChange}
+          placeholder="Years Experience (e.g. 1+)"
+          className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
+        />
+
+        <input
+          name="cloudPlatforms"
+          value={form.cloudPlatforms}
+          onChange={handleChange}
+          placeholder="Cloud Platforms (e.g. 2)"
+          className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
+        />
+
+        <input
+          name="technologies"
+          value={form.technologies}
+          onChange={handleChange}
+          placeholder="Technologies (e.g. 20+)"
+          className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
+        />
+
+        <input
+          value="Projects Completed — automatic"
+          disabled
+          className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3 text-zinc-500"
         />
 
         <input

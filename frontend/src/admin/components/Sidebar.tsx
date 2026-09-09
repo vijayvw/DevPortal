@@ -7,6 +7,7 @@ import {
   FiMail,
   FiImage,
   FiSettings,
+  FiUser,
 } from "react-icons/fi";
 
 const menu = [
@@ -16,6 +17,7 @@ const menu = [
   { to: "/admin/blog", label: "Blog", icon: FiBook },
   { to: "/admin/contact", label: "Contacts", icon: FiMail },
   { to: "/admin/media", label: "Media", icon: FiImage },
+  { to: "/admin/about", label: "About", icon: FiUser },
   { to: "/admin/settings", label: "Settings", icon: FiSettings },
 ];
 

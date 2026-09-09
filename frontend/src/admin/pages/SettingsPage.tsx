@@ -21,7 +21,6 @@ export default function SettingsPage() {
         </div>
 
         <PortfolioCard />
-
         <SystemInfoCard />
       </div>
     </AdminLayout>

@@ -5,6 +5,7 @@ import {
   loginSchema,
   refreshSchema,
   changePasswordSchema,
+  updateProfileSchema,
 } from './auth.schema';
 import { validate } from '../../common/middleware/validate.middleware';
 import { requireAuth } from '../../common/middleware/auth.middleware';
@@ -42,6 +43,14 @@ authRouter.get(
   '/me',
   requireAuth,
   authController.me.bind(authController),
+);
+
+
+authRouter.patch(
+  '/me',
+  requireAuth,
+  validate(updateProfileSchema),
+  authController.updateProfile.bind(authController),
 );
 
 authRouter.post(

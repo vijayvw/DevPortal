@@ -48,10 +48,24 @@ export const Home = () => {
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
   const stats = [
-    { label: 'Years Experience', value: '1+' },
-    { label: 'Cloud Platforms', value: '2' },
-    { label: 'Projects Completed', value: projectsData?.meta ? String(projectsData.meta.total) : '10+' },
-    { label: 'Technologies', value: '20+' },
+    {
+      label: 'Years Experience',
+      value: settings?.yearsExperience ?? '1+',
+    },
+    {
+      label: 'Cloud Platforms',
+      value: settings?.cloudPlatforms ?? '2',
+    },
+    {
+      label: 'Projects Completed',
+      value: projectsData?.meta
+        ? String(projectsData.meta.total)
+        : '0',
+    },
+    {
+      label: 'Technologies',
+      value: settings?.technologies ?? '20+',
+    },
   ];
 
   return (
@@ -91,14 +105,24 @@ export const Home = () => {
               <span className="terminal-cursor ml-2" />
             </div>
 
-            {/* Subtitle */}
+            {/* Tagline */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2 }}
               className="text-xl md:text-2xl text-neutral-200 max-w-4xl mx-auto leading-relaxed"
             >
-              {settings?.tagline ?? "Aspiring DevOps & Cloud Security Engineer passionate about building scalable infrastructure, automating deployments, and continuously learning modern cloud-native technologies."}
+              {settings?.tagline ?? "DevOps Engineer | Cloud Engineer | Cloud Security Enthusiast"}
+            </motion.p>
+
+            {/* Short Description */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.2 }}
+              className="mt-3 text-base md:text-lg text-neutral-400 max-w-3xl mx-auto leading-relaxed"
+            >
+              {settings?.shortDescription ?? "Aspiring DevOps & Cloud Security Engineer passionate about building scalable infrastructure, automating deployments, and continuously learning modern cloud-native technologies."}
             </motion.p>
 
             {/* CTA Buttons */}

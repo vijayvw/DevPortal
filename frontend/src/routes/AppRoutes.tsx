@@ -12,6 +12,7 @@ import Media from "../admin/pages/Media";
 import ContactsPage from "../admin/pages/ContactsPage";
 import AuditLogsPage from "../admin/pages/AuditLogsPage";
 import SettingsPage from "../admin/pages/SettingsPage";
+import About from "../admin/pages/About";
 export default function AppRoutes() {
   return (
     <BrowserRouter>
@@ -65,6 +66,15 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute>
             <ContactsPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/about"
+        element={
+          <ProtectedRoute>
+            <About />
           </ProtectedRoute>
         }
       />

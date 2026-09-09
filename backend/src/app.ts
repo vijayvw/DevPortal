@@ -43,6 +43,7 @@ import { auditLogRouter } from './modules/audit-log/audit-log.routes';
 import { dashboardRouter } from './modules/dashboard/dashboard.routes';
 
 import { settingsRouter } from './modules/settings/settings.routes';
+import { publicSettingsRouter } from './modules/settings/settings.public.routes';
 
 import { mediaAssetRouter } from './modules/media/media-asset.routes';
 
@@ -219,6 +220,11 @@ export function createApp() {
   app.use(
     `${config.server.apiPrefix}/admin/dashboard`,
     dashboardRouter,
+  );
+
+  app.use(
+    `${config.server.apiPrefix}/settings`,
+    publicSettingsRouter,
   );
 
   app.use(

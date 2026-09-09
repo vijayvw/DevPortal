@@ -1,10 +1,30 @@
 import { apiClient } from "../client";
 import type { ApiEnvelope } from "../types";
 
+export interface AboutTimelineItem {
+  year: string;
+  title: string;
+  organization?: string;
+  description: string;
+  icon?: string;
+}
+
 export interface PortfolioSettings {
   id: string;
   portfolioTitle: string | null;
   tagline: string | null;
+  shortDescription: string | null;
+  yearsExperience: string | null;
+  cloudPlatforms: string | null;
+  technologies: string | null;
+  aboutGreeting: string | null;
+  aboutParagraphs: string[];
+  aboutQuote: string | null;
+  aboutGoal: string | null;
+  specializations: string[];
+  timeline: AboutTimelineItem[];
+  timelineTitle: string | null;
+  timelineSubtitle: string | null;
   email: string | null;
   phone: string | null;
   address: string | null;
@@ -19,6 +39,18 @@ export interface PortfolioSettings {
 export interface UpdatePortfolioRequest {
   portfolioTitle?: string;
   tagline?: string;
+  shortDescription?: string;
+  yearsExperience?: string;
+  cloudPlatforms?: string;
+  technologies?: string;
+  aboutGreeting?: string;
+  aboutParagraphs?: string[];
+  aboutQuote?: string;
+  aboutGoal?: string;
+  specializations?: string[];
+  timeline?: AboutTimelineItem[];
+  timelineTitle?: string;
+  timelineSubtitle?: string;
   email?: string;
   phone?: string;
   address?: string;

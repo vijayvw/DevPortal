@@ -2,27 +2,76 @@ import { motion } from 'framer-motion';
 import { TerminalHeader } from '../components/TerminalHeader';
 import { Typewriter } from '../components/Typewriter';
 import { Calendar, Code } from 'lucide-react';
+import { usePublicSettings } from '../hooks/usePublicSettings';
+import { useProjects } from '../queries/useProjects';
 
 
 
 export const About = () => {
-  const timeline = [
-    {
+  const { data: settings, isLoading: settingsLoading } = usePublicSettings();
+  const { data: projectsData } = useProjects({ limit: 1 });
 
-      year: '2026 - Present',
-      title: "Building Secure Cloud-Native Platforms",
-      description:
-        'Designing and deploying cloud-native infrastructure using AWS, Kubernetes, Docker, Terraform, GitHub Actions, Jenkins, and Linux while focusing on automation, security, Infrastructure as Code, and production-ready deployments.',
-      icon: Code,},
-    {
+  const aboutParagraphs = settings?.aboutParagraphs?.length
+    ? settings.aboutParagraphs
+    : [];
 
-      year: '2022 - 2025',
-      title: 'Bachelor of Computer Applications (BCA)',
-      college: 'Deogiri Institute Of Technology And Management Studies',
-      description: 'Focused on cloud computing, Linux, networking, and DevOps foundations.',
-      icon: Calendar,
+  const specializations = settings?.specializations?.length
+    ? settings.specializations
+    : [];
+
+  const stats = [
+    {
+      label: 'Experience',
+      value: settings?.yearsExperience
+        ? `${settings.yearsExperience} years`
+        : '1+ years',
+    },
+    {
+      label: 'Cloud Platforms',
+      value: settings?.cloudPlatforms ?? 'AWS',
+    },
+    {
+      label: 'Projects',
+      value: projectsData?.meta
+        ? `${projectsData.meta.total}+ deployed`
+        : '0 deployed',
+    },
+    {
+      label: 'Technologies',
+      value: settings?.technologies
+        ? `${settings.technologies} mastered`
+        : '20+ mastered',
     },
   ];
+
+  const defaultTimeline = [
+    {
+      year: '2026 - Present',
+      title: 'Building Secure Cloud-Native Platforms',
+      organization: 'DevOps & Cloud Engineering',
+      description:
+        'Designing and deploying cloud-native infrastructure using AWS, Kubernetes, Docker, Terraform, GitHub Actions, Jenkins, and Linux while focusing on automation, security, Infrastructure as Code, and production-ready deployments.',
+      icon: 'Code',
+    },
+    {
+      year: '2022 - 2025',
+      title: 'Bachelor of Computer Applications (BCA)',
+      organization: 'Deogiri Institute Of Technology And Management Studies',
+      description:
+        'Focused on cloud computing, Linux, networking, and DevOps foundations.',
+      icon: 'Calendar',
+    },
+  ];
+
+  const timeline =
+    settings?.timeline?.length
+      ? settings.timeline
+      : defaultTimeline;
+
+  const iconMap = {
+    Code,
+    Calendar,
+  };
 
   return (
     <div className="min-h-screen bg-black">
@@ -52,39 +101,34 @@ export const About = () => {
                 </div>
                 <div className="space-y-4 text-neutral-200 leading-relaxed">
                   <Typewriter
-                    text="Hello, I'm Vijay vw, and I transform ideas into scalable, secure, and reliable infrastructure."
+                    text={
+                      settings?.aboutGreeting ??
+                      "Hello, I'm Vijay vw, and I transform ideas into scalable, secure, and reliable infrastructure."
+                    }
                     delay={30}
                     className="text-primary-500 font-semibold block mb-4"
                   />
-                  <p>
-                    I engineer secure infrastructure, automate complex systems, and build cloud-native platforms that are designed for resilience from day one. My work sits at the intersection of DevOps, Cloud Engineering, Cybersecurity, and Infrastructure Automation, where reliability is treated as a security feature rather than an afterthought.
-                  </p>
-                  <p>
-Instead of simply deploying applications, I focus on building production-ready ecosystems. Every server, container, pipeline, and Kubernetes cluster should be reproducible, observable, and resilient against failure. I believe modern infrastructure should be version-controlled, automatically provisioned, continuously validated, and secure by default.
-                  </p>
-                  <p>
-                    My engineering journey began with Linux system administration, where understanding operating systems and networking became the foundation for everything that followed. That curiosity gradually expanded into container technologies, Kubernetes orchestration, Infrastructure as Code, CI/CD automation, cloud architecture, and offensive security practices.
-                  </p>
-                  <p>Alongside AWS and DevOps, I continuously expand my expertise in Azure, GCP, cloud security, infrastructure automation, and modern engineering practices to build secure, resilient, and production-ready systems.
-</p>
 
-<p>
-  Today I work extensively with AWS, Docker, Kubernetes, Terraform, GitHub Actions, Jenkins, Linux, and modern cloud-native tooling while continuously expanding my expertise in cloud security, container hardening, vulnerability assessment, identity management, and secure software delivery.
-</p>
+                  {aboutParagraphs.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
 
-<p>Beyond building systems, I enjoy understanding how they fail. I actively explore penetration testing methodologies, Capture The Flag challenges, infrastructure hardening, and attack simulations because designing secure platforms begins with understanding how they can be compromised.
-</p>
-<p>For me, infrastructure is more than servers and deployments it's an engineering discipline that combines automation, scalability, performance, observability, and security into one cohesive system.
+                  {settings?.aboutQuote && (
+                    <p className="font-serif italic text-x text-neutral-500 leading-0">
+                      {settings.aboutQuote.split("\n").map((line, index) => (
+                        <span key={index}>
+                          {line}
+                          {index < settings.aboutQuote!.split("\n").length - 1 && <br />}
+                        </span>
+                      ))}
+                    </p>
+                  )}
 
-My long-term mission is to become a Cloud Security Engineer capable of designing highly available, globally distributed, self-healing infrastructure that remains secure throughout its entire lifecycle.</p>
-<p className="font-serif italic text-x text-neutral-500 leading-0">
-  "I don't just automate deployments.
-  <br />
-  I engineer platforms that can be trusted."
-</p>
-                  <p className="text-primary-500 font-medium">
-  My goal is to build infrastructure that is scalable by design, secure by default, and automated for the future.
-                  </p>
+                  {settings?.aboutGoal && (
+                    <p className="text-primary-500 font-medium">
+                      {settings.aboutGoal}
+                    </p>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -102,22 +146,17 @@ My long-term mission is to become a Cloud Security Engineer capable of designing
                   Quick Stats
                 </h3>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-400">Experience</span>
-                    <span className="text-primary-500 font-mono text-sm">1+ years</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-400">Cloud Platforms</span>
-                    <span className="text-primary-500 font-mono text-sm">AWS</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-400">Projects</span>
-                    <span className="text-primary-500 font-mono text-sm">12+ deployed</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-400">Technologies</span>
-                    <span className="text-primary-500 font-mono text-sm">20+ mastered</span>
-                  </div>
+                  {stats.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="text-neutral-400">{stat.label}</span>
+                      <span className="text-primary-500 font-mono text-sm">
+                        {stat.value}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -126,30 +165,7 @@ My long-term mission is to become a Cloud Security Engineer capable of designing
                   Specializations
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {["Cloud Security",
-    "DevSecOps",
-    "Kubernetes",
-    "Container Security",
-    "Infrastructure as Code",
-    "AWS",
-    "CI/CD Engineering",
-    "Linux Administration",
-    "Cloud Architecture",
-     "Terraform",
-    "Infrastructure Automation",
-    "Docker & Podman",
-    "GitHub Actions",
-    "Jenkins",
-    "Container Orchestration",
-    "Identity & Access Management",
-    "Network Security",
-    "System Hardening",
-    "Vulnerability Assessment",
-    "Penetration Testing",
-    "Cloud Native",
-    "Monitoring & Observability",
-    "Incident Response",
-    "Shell Scripting"].map((skill) => (
+                  {specializations.map((skill) => (
                     <span
                       key={skill}
                       className="px-3 py-1.5 bg-[#080D10] text-neutral-300 text-sm rounded-md border border-neutral-800 hover:border-primary-500/50 hover:text-primary-400 transition-all duration-300"
@@ -175,10 +191,11 @@ My long-term mission is to become a Cloud Security Engineer capable of designing
             className="text-center mb-16"
           >
             <h2 className="font-mono text-3xl md:text-4xl font-bold text-primary-500 mb-4">
-              Career Timeline
+              {settings?.timelineTitle ?? "Career Timeline"}
             </h2>
             <p className="text-neutral-400 max-w-2xl mx-auto">
-              My journey from to DevOps engineering
+              {settings?.timelineSubtitle ??
+                "My journey from learning to DevOps engineering"}
             </p>
           </motion.div>
 
@@ -188,7 +205,8 @@ My long-term mission is to become a Cloud Security Engineer capable of designing
 
             <div className="space-y-12">
               {timeline.map((item, index) => {
-                const IconComponent = item.icon;
+                const IconComponent =
+                  iconMap[item.icon as keyof typeof iconMap] ?? Code;
                 const isEven = index % 2 === 0;
                 
                 return (
@@ -212,9 +230,11 @@ My long-term mission is to become a Cloud Security Engineer capable of designing
                       <div className="bg-bg-elevated border border-neutral-700 rounded-lg p-6 hover:border-primary-500/50 transition-colors shadow-card">
                         <div className="font-mono text-accent-500 text-sm mb-2">{item.year}</div>
                         <h3 className="font-semibold text-xl text-neutral-200 mb-1">{item.title}</h3>
-                      <div className="text-primary-500 font-medium mb-3">
-                          {'college' in item ? item.college : 'DevOps & Cloud Engineering'}
-                      </div>
+                      {item.organization && (
+                        <div className="text-primary-500 font-medium mb-3">
+                          {item.organization}
+                        </div>
+                      )}
                         <p className="text-neutral-400 text-sm leading-relaxed">{item.description}</p>
                       </div>
                     </div>

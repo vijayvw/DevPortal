@@ -181,6 +181,53 @@ export class AuthService {
     });
   }
 
+  async updateProfile(
+    userId: string,
+    data: {
+      name?: string;
+      email?: string;
+    },
+  ) {
+    const user = await userRepository.findById(userId);
+
+    if (!user || user.deletedAt) {
+      throw new NotFoundError('User not found');
+    }
+
+    const updates: {
+      name?: string;
+      email?: string;
+    } = {};
+
+    if (data.name !== undefined) {
+      updates.name = data.name.trim();
+    }
+
+    if (data.email !== undefined) {
+      const email = data.email.trim().toLowerCase();
+
+      if (email !== user.email.toLowerCase()) {
+        const existingUser = await userRepository.findByEmail(email);
+
+        if (existingUser && existingUser.id !== userId && !existingUser.deletedAt) {
+          throw new UnauthorizedError('Email address is already in use');
+        }
+
+        updates.email = email;
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      const updatedUser = await userRepository.update(userId, updates);
+
+      if (!updatedUser) {
+        throw new NotFoundError('User not found');
+      }
+    }
+
+    return this.getCurrentUser(userId);
+  }
+
   async getCurrentUser(userId: string) {
     const user = await userRepository.findById(userId);
 
