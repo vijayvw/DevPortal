@@ -97,6 +97,7 @@ export interface SkillDto {
   id: string;
   name: string;
   category: string;
+  categoryId: string;
   iconUrl: string | null;
   proficiency: number;
   yearsExperience: number | null;

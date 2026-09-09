@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCreateSkill } from "../queries/useCreateSkill";
+import { useAdminSkillCategories } from "../queries/useSkillCategories";
 
 interface Props {
   open: boolean;
@@ -11,10 +12,13 @@ export default function CreateSkillModal({
   onClose,
 }: Props) {
   const mutation = useCreateSkill();
+  const { data: categories, isLoading: categoriesLoading } =
+    useAdminSkillCategories();
 
   const [form, setForm] = useState({
     name: "",
     category: "",
+    categoryId: "",
     proficiency: 80,
     priority: 0,
     yearsExperience: 0,
@@ -34,16 +38,15 @@ export default function CreateSkillModal({
     }));
   }
 
-  async function handleSubmit(
-    e: React.FormEvent
-  ) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!form.categoryId) return;
 
     await mutation.mutateAsync({
       ...form,
       iconUrl: form.iconUrl || null,
-      yearsExperience:
-        form.yearsExperience || null,
+      yearsExperience: form.yearsExperience || null,
     });
 
     onClose();
@@ -51,6 +54,7 @@ export default function CreateSkillModal({
     setForm({
       name: "",
       category: "",
+      categoryId: "",
       proficiency: 80,
       priority: 0,
       yearsExperience: 0,
@@ -61,7 +65,6 @@ export default function CreateSkillModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-lg rounded-xl bg-neutral-900 p-8"
@@ -71,34 +74,50 @@ export default function CreateSkillModal({
         </h2>
 
         <div className="space-y-4">
-
           <input
             placeholder="Name"
             value={form.name}
-            onChange={(e) =>
-              update("name", e.target.value)
-            }
+            onChange={(e) => update("name", e.target.value)}
             className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
+            required
           />
 
-          <input
-            placeholder="Category"
-            value={form.category}
-            onChange={(e) =>
-              update("category", e.target.value)
-            }
+          <select
+            value={form.categoryId}
+            onChange={(e) => {
+              const categoryId = e.target.value;
+              const category = categories?.find(
+                (item) => item.id === categoryId
+              );
+
+              update("categoryId", categoryId);
+              update("category", category?.slug ?? "");
+            }}
             className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
-          />
+            required
+            disabled={categoriesLoading}
+          >
+            <option value="">
+              {categoriesLoading
+                ? "Loading categories..."
+                : "Select Category"}
+            </option>
+
+            {categories?.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
 
           <input
             type="number"
             placeholder="Proficiency"
+            min={0}
+            max={100}
             value={form.proficiency}
             onChange={(e) =>
-              update(
-                "proficiency",
-                Number(e.target.value)
-              )
+              update("proficiency", Number(e.target.value))
             }
             className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
           />
@@ -106,12 +125,10 @@ export default function CreateSkillModal({
           <input
             type="number"
             placeholder="Priority"
+            min={0}
             value={form.priority}
             onChange={(e) =>
-              update(
-                "priority",
-                Number(e.target.value)
-              )
+              update("priority", Number(e.target.value))
             }
             className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
           />
@@ -119,12 +136,11 @@ export default function CreateSkillModal({
           <input
             type="number"
             placeholder="Years Experience"
+            min={0}
+            max={50}
             value={form.yearsExperience}
             onChange={(e) =>
-              update(
-                "yearsExperience",
-                Number(e.target.value)
-              )
+              update("yearsExperience", Number(e.target.value))
             }
             className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
           />
@@ -132,9 +148,7 @@ export default function CreateSkillModal({
           <input
             placeholder="Icon URL"
             value={form.iconUrl}
-            onChange={(e) =>
-              update("iconUrl", e.target.value)
-            }
+            onChange={(e) => update("iconUrl", e.target.value)}
             className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
           />
 
@@ -148,11 +162,9 @@ export default function CreateSkillModal({
             />
             Visible
           </label>
-
         </div>
 
         <div className="mt-8 flex justify-end gap-4">
-
           <button
             type="button"
             onClick={onClose}
@@ -163,16 +175,12 @@ export default function CreateSkillModal({
 
           <button
             type="submit"
-            disabled={mutation.isPending}
+            disabled={mutation.isPending || !form.categoryId}
             className="rounded bg-blue-600 px-4 py-2 text-white"
           >
-            {mutation.isPending
-              ? "Saving..."
-              : "Save"}
+            {mutation.isPending ? "Saving..." : "Save"}
           </button>
-
         </div>
-
       </form>
     </div>
   );

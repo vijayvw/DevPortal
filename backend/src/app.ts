@@ -26,6 +26,8 @@ import { blogPostAdminRouter } from './modules/blog/blog-post.admin.routes';
 
 import { skillRouter } from './modules/skills/skill.routes';
 import { skillAdminRouter } from './modules/skills/skill.admin.routes';
+import { categoryRouter } from './modules/skills/category.routes';
+import { categoryAdminRouter } from './modules/skills/category.admin.routes';
 
 import { technologyRouter } from './modules/technologies/technology.routes';
 import { technologyAdminRouter } from './modules/technologies/technology.admin.routes';
@@ -165,6 +167,11 @@ export function createApp() {
   );
 
   app.use(
+    `${config.server.apiPrefix}/skill-categories`,
+    categoryRouter,
+  );
+
+  app.use(
     `${config.server.apiPrefix}/technologies`,
     technologyRouter,
   );
@@ -172,6 +179,11 @@ export function createApp() {
   app.use(
     `${config.server.apiPrefix}/admin/skills`,
     skillAdminRouter,
+  );
+
+  app.use(
+    `${config.server.apiPrefix}/admin/skill-categories`,
+    categoryAdminRouter,
   );
 
   app.use(

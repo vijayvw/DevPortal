@@ -15,6 +15,7 @@ export interface Skill {
   id: string;
   name: string;
   category: string;
+  categoryId: string;
   iconUrl: string | null;
   proficiency: number;
   yearsExperience: number | null;
@@ -29,6 +30,7 @@ export interface SkillCreateInput {
   id: string;
   name: string;
   category: string;
+  categoryId: string;
   iconUrl?: string | null;
   proficiency: number;
   yearsExperience?: number | null;
@@ -39,6 +41,7 @@ export interface SkillCreateInput {
 export interface SkillUpdateInput {
   name?: string;
   category?: string;
+  categoryId?: string;
   iconUrl?: string | null;
   proficiency?: number;
   yearsExperience?: number | null;
@@ -57,6 +60,7 @@ function toSkill(item: Record<string, any>): Skill {
     id: item.id,
     name: item.name,
     category: item.category,
+    categoryId: item.categoryId ?? item.category,
     iconUrl: item.iconUrl ?? null,
     proficiency: item.proficiency ?? 0,
     yearsExperience: item.yearsExperience ?? null,
@@ -259,6 +263,7 @@ export class SkillDynamoDBRepository {
       id: data.id,
       name: data.name,
       category: data.category,
+      categoryId: data.categoryId,
       iconUrl: data.iconUrl ?? null,
       proficiency: data.proficiency,
       yearsExperience: data.yearsExperience ?? null,

@@ -11,6 +11,7 @@ export async function getAdminSkills() {
 export interface CreateSkillRequest {
   name: string;
   category: string;
+  categoryId: string;
   iconUrl?: string | null;
   proficiency: number;
   yearsExperience?: number | null;
@@ -41,7 +42,7 @@ export async function updateSkill(
   id: string,
   data: Partial<CreateSkillRequest>
 ) {
-  const response = await apiClient.put(
+  const response = await apiClient.patch(
     `/admin/skills/${id}`,
     data
   );

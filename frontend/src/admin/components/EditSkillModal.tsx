@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useAdminSkill } from "../queries/useAdminSkill";
 import { useUpdateSkill } from "../queries/useUpdateSkill";
+import { useAdminSkillCategories } from "../queries/useSkillCategories";
 
 interface Props {
   skillId: string | null;
@@ -13,11 +14,14 @@ export default function EditSkillModal({
   onClose,
 }: Props) {
   const { data, isLoading } = useAdminSkill(skillId);
+  const { data: categories, isLoading: categoriesLoading } =
+    useAdminSkillCategories();
   const updateMutation = useUpdateSkill();
 
   const [form, setForm] = useState({
     name: "",
     category: "",
+    categoryId: "",
     proficiency: 0,
     priority: 0,
     yearsExperience: 0,
@@ -31,6 +35,7 @@ export default function EditSkillModal({
     setForm({
       name: data.name,
       category: data.category,
+      categoryId: data.categoryId ?? data.category,
       proficiency: data.proficiency,
       priority: data.priority,
       yearsExperience: data.yearsExperience ?? 0,
@@ -55,6 +60,8 @@ export default function EditSkillModal({
     e: React.FormEvent<HTMLFormElement>
   ) {
     e.preventDefault();
+
+    if (!form.categoryId) return;
 
     await updateMutation.mutateAsync({
       id: skillId,
@@ -82,25 +89,53 @@ export default function EditSkillModal({
           <p className="text-white">Loading...</p>
         ) : (
           <div className="space-y-4">
-
             <input
               value={form.name}
               onChange={(e) =>
                 updateField("name", e.target.value)
               }
               className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
+              required
             />
 
-            <input
-              value={form.category}
-              onChange={(e) =>
-                updateField("category", e.target.value)
-              }
+            <select
+              value={form.categoryId}
+              onChange={(e) => {
+                const categoryId = e.target.value;
+                const category = categories?.find(
+                  (item) => item.id === categoryId
+                );
+
+                updateField("categoryId", categoryId);
+                updateField(
+                  "category",
+                  category?.slug ?? ""
+                );
+              }}
               className="w-full rounded border border-neutral-700 bg-neutral-800 p-3 text-white"
-            />
+              required
+              disabled={categoriesLoading}
+            >
+              <option value="">
+                {categoriesLoading
+                  ? "Loading categories..."
+                  : "Select Category"}
+              </option>
+
+              {categories?.map((category) => (
+                <option
+                  key={category.id}
+                  value={category.id}
+                >
+                  {category.name}
+                </option>
+              ))}
+            </select>
 
             <input
               type="number"
+              min={0}
+              max={100}
               value={form.proficiency}
               onChange={(e) =>
                 updateField(
@@ -113,6 +148,7 @@ export default function EditSkillModal({
 
             <input
               type="number"
+              min={0}
               value={form.priority}
               onChange={(e) =>
                 updateField(
@@ -125,6 +161,8 @@ export default function EditSkillModal({
 
             <input
               type="number"
+              min={0}
+              max={50}
               value={form.yearsExperience}
               onChange={(e) =>
                 updateField(
@@ -168,10 +206,15 @@ export default function EditSkillModal({
 
           <button
             type="submit"
-            disabled={updateMutation.isPending}
+            disabled={
+              updateMutation.isPending ||
+              !form.categoryId
+            }
             className="rounded bg-blue-600 px-4 py-2 text-white"
           >
-            {updateMutation.isPending ? "Saving..." : "Save"}
+            {updateMutation.isPending
+              ? "Saving..."
+              : "Save"}
           </button>
         </div>
       </form>

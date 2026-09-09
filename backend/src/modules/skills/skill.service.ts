@@ -1,15 +1,23 @@
+import { randomUUID } from 'crypto';
+
 import {
   ConflictError,
   NotFoundError,
 } from '../../common/errors';
+
 import { skillRepository } from './skill.dynamodb.repository';
+import { skillCategoryRepository } from './category.dynamodb.repository';
 
 export class SkillService {
   async listPublic() {
     const skills = await skillRepository.findAll();
 
     return skills
-      .filter((skill) => skill.visible && !skill.deletedAt)
+      .filter(
+        (skill) =>
+          skill.visible &&
+          !skill.deletedAt,
+      )
       .sort(
         (a, b) =>
           a.priority - b.priority ||
@@ -33,23 +41,90 @@ export class SkillService {
   }
 
   async create(data: any) {
-    const existing = (await skillRepository.findAll()).find(
+    const existing = (
+      await skillRepository.findAll()
+    ).find(
       (skill) =>
-        skill.name.toLowerCase() === data.name.toLowerCase() &&
+        skill.name.toLowerCase() ===
+          data.name.toLowerCase() &&
         !skill.deletedAt,
     );
 
     if (existing) {
-      throw new ConflictError('Skill already exists');
+      throw new ConflictError(
+        'Skill already exists',
+      );
     }
 
-    return skillRepository.create(data);
+    const categoryId =
+      data.categoryId ?? data.category;
+
+    const category =
+      await skillCategoryRepository.findById(
+        categoryId,
+      );
+
+    if (!category) {
+      throw new NotFoundError(
+        'Skill category not found',
+      );
+    }
+
+    return skillRepository.create({
+      ...data,
+      id: randomUUID(),
+      category: category.slug,
+      categoryId: category.id,
+    });
   }
 
   async update(id: string, data: any) {
     await this.get(id);
 
-    return skillRepository.update(id, data);
+    let updateData = {
+      ...data,
+    };
+
+    if (data.categoryId) {
+      const category =
+        await skillCategoryRepository.findById(
+          data.categoryId,
+        );
+
+      if (!category) {
+        throw new NotFoundError(
+          'Skill category not found',
+        );
+      }
+
+      updateData = {
+        ...updateData,
+        category: category.slug,
+        categoryId: category.id,
+      };
+    } else if (data.category) {
+      const category =
+        await skillCategoryRepository.findById(
+          data.category,
+        );
+
+      if (!category) {
+        throw new NotFoundError(
+          'Skill category not found',
+        );
+      }
+
+      updateData = {
+        ...updateData,
+        category: category.slug,
+        categoryId: category.id,
+      };
+    }
+
+    return skillRepository.update(
+      id,
+      updateData,
+    );
   }
 
   async delete(id: string) {
