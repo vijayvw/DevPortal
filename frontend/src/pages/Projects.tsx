@@ -7,6 +7,7 @@ import { LoadingState } from '../components/states/LoadingState';
 import { ErrorState } from '../components/states/ErrorState';
 import { ProjectDetailsModal } from "../components/projects/ProjectDetailsModal";
 import type { ProjectListItemDto } from "../api/types";
+import { usePublicSettings } from '../hooks/usePublicSettings';
 import {
   ExternalLink,
   Github,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 
 export const Projects = () => {
+  const { data: settings } = usePublicSettings();
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState("");
   const [featuredOnly, setFeaturedOnly] = useState(false);
@@ -396,7 +398,7 @@ export const Projects = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://github.com/vijayvw"
+                href={settings?.github ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-4 bg-primary-500 text-bg-surface font-semibold rounded-lg hover:bg-primary-700 transition-all duration-200 shadow-glow hover:shadow-card-hover"

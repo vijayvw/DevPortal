@@ -7,8 +7,10 @@ export interface PortfolioSettings {
   tagline: string | null;
   email: string | null;
   phone: string | null;
+  address: string | null;
   github: string | null;
   linkedin: string | null;
+  twitter: string | null;
   resumeUrl: string | null;
   createdAt: string;
   updatedAt: string;
@@ -19,8 +21,10 @@ export interface UpdatePortfolioRequest {
   tagline?: string;
   email?: string;
   phone?: string;
+  address?: string;
   github?: string;
   linkedin?: string;
+  twitter?: string;
   resumeUrl?: string;
 }
 
@@ -38,7 +42,7 @@ export async function updatePortfolioSettings(
   const response = await apiClient.patch<
     ApiEnvelope<PortfolioSettings>
   >(
-    "/admin/settings/portfolio",
+    "/admin/settings",
     data
   );
 

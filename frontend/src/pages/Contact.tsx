@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { TerminalHeader } from '../components/TerminalHeader';
 import { Typewriter } from '../components/Typewriter';
 import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter, ExternalLink, CheckCircle } from 'lucide-react';
-import { CONTACT } from '../data/portfolio';
+import { usePublicSettings } from '../hooks/usePublicSettings';
 import { useContactForm } from '../queries/useContactForm';
 import { ApiClientError } from '../api/client';
 import { FaXTwitter } from "react-icons/fa6";
@@ -19,6 +19,14 @@ export const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const contactMutation = useContactForm();
+  const { data: settings, isLoading: settingsLoading } = usePublicSettings();
+
+  const contactEmail = settings?.email ?? '';
+  const contactPhone = settings?.phone ?? '';
+  const contactAddress = settings?.address ?? '';
+  const githubUrl = settings?.github ?? '#';
+  const linkedinUrl = settings?.linkedin ?? '#';
+  const twitterUrl = settings?.twitter ?? '#';
   // Alias so the JSX below (which already reads `isSubmitting` in three
   // places) needs no further changes — M6 only swaps where the form
   // submits to, not how the UI reflects submission state.
@@ -90,21 +98,21 @@ export const Contact = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: CONTACT.email,
-      href: `mailto:${CONTACT.email}`,
+      value: contactEmail,
+      href: `mailto:${contactEmail}`,
       color: 'text-blue-500',
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: CONTACT.phoneNo,
-      href: `tel:${CONTACT.phoneNo}`,
+      value: contactPhone,
+      href: `tel:${contactPhone}`,
       color: 'text-green-500',
     },
     {
       icon: MapPin,
       label: 'Location',
-      value: CONTACT.address,
+      value: contactAddress,
       href: '#',
       color: 'text-purple-500',
     },
@@ -113,23 +121,33 @@ export const Contact = () => {
   const socialLinks = [
     {
       name: 'GitHub',
-      url: CONTACT.social.github,
+      url: githubUrl,
       icon: Github,
       color: 'hover:text-white',
     },
     {
       name: 'LinkedIn',
-      url: CONTACT.social.linkedin,
+      url: linkedinUrl,
       icon: Linkedin,
       color: 'hover:text-blue-500',
     },
     {
       name: 'X',
-      url: CONTACT.social.twitter,
+      url: twitterUrl,
       icon: FaXTwitter,
       color: 'hover:text-white',
     },
   ];
+
+  if (settingsLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="font-mono text-primary-500">
+          Loading contact information...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black">
@@ -298,7 +316,17 @@ export const Contact = () => {
                 <div className="space-y-4">
                   {contactMethods.map((method) => {
                     const IconComponent = method.icon;
-                    return (
+                    if (settingsLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="font-mono text-primary-500">
+          Loading contact information...
+        </div>
+      </div>
+    );
+  }
+
+  return (
                       <div key={method.label} className="flex items-center space-x-4">
                         <div className={`p-3 bg-black border border-neutral-800 rounded-lg ${method.color}`}>
                           <IconComponent size={20} />
@@ -338,7 +366,17 @@ export const Contact = () => {
                 <div className="grid grid-cols-3 gap-4">
                   {socialLinks.map((link) => {
                     const IconComponent = link.icon;
-                    return (
+                    if (settingsLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="font-mono text-primary-500">
+          Loading contact information...
+        </div>
+      </div>
+    );
+  }
+
+  return (
                       <a
                         key={link.name}
                         href={link.url}

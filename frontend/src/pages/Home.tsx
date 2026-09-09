@@ -11,6 +11,7 @@ import { LoadingState } from '../components/states/LoadingState';
 import { ErrorState } from '../components/states/ErrorState';
 import { EmptyState } from '../components/states/EmptyState';
 import { useNavigate } from "react-router-dom";
+import { usePublicSettings } from '../hooks/usePublicSettings';
 
 
 
@@ -30,6 +31,7 @@ const FEATURED_SKILL_NAMES = [
 
   
 export const Home = () => {
+  const { data: settings } = usePublicSettings();
   const navigate = useNavigate();
   const [startHeroAnimation, setStartHeroAnimation] = useState(false);
   useEffect(() => {
@@ -267,7 +269,7 @@ export const Home = () => {
   Start a Project
 </button>
               <a
-                href="https://github.com/vijayvw"
+                href={settings?.github ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-4 border-2 border-neutral-600 text-neutral-200 hover:border-primary-500 hover:text-primary-500 font-semibold rounded-lg transition-all duration-200"

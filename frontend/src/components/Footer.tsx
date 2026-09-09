@@ -1,34 +1,35 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
-import { CONTACT } from '../data/portfolio';
+import { usePublicSettings } from '../hooks/usePublicSettings';
 import { FaXTwitter } from "react-icons/fa6";
 
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { data: settings } = usePublicSettings();
 
   const socialLinks = [
   {
     name: "GitHub",
-    url: CONTACT.social.github,
+    url: settings?.github ?? '#',
     icon: Github,
     hoverClass: "hover:bg-white hover:text-black",
   },
   {
     name: "LinkedIn",
-    url: CONTACT.social.linkedin,
+    url: settings?.linkedin ?? '#',
     icon: Linkedin,
     hoverClass: "hover:bg-[#0A66C2] hover:text-white",
   },
   {
     name: "X",
-    url: CONTACT.social.twitter,
+    url: settings?.twitter ?? '#',
     icon: FaXTwitter,
     hoverClass: "hover:bg-white hover:text-black",
   },
   {
     name: "Email",
-    url: `mailto:${CONTACT.email}`,
+    url: settings?.email ? `mailto:${settings.email}` : '#',
     icon: Mail,
     hoverClass: "hover:bg-violet-500 hover:text-white",
   },

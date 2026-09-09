@@ -15,6 +15,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
 
   login: (data: LoginResponse) => void;
+  updateUser: (data: AuthUser) => void;
   logout: () => void;
 }
 
@@ -55,6 +56,11 @@ export function AuthProvider({ children }: Props) {
     setRefreshToken(data.refreshToken);
   }
 
+  function updateUser(data: AuthUser) {
+    localStorage.setItem("user", JSON.stringify(data));
+    setUser(data);
+  }
+
   function logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
@@ -72,6 +78,7 @@ export function AuthProvider({ children }: Props) {
       refreshToken,
       isAuthenticated: !!accessToken,
       login,
+      updateUser,
       logout,
     }),
     [user, accessToken, refreshToken]

@@ -24,6 +24,11 @@ export interface ChangePasswordRequest {
   newPassword: string;
 }
 
+export interface UpdateProfileRequest {
+  name?: string;
+  email?: string;
+}
+
 export async function login(
   credentials: LoginRequest
 ): Promise<LoginResponse> {
@@ -35,13 +40,22 @@ export async function login(
   return response.data.data;
 }
 
-
-
 export async function changePassword(
   payload: ChangePasswordRequest
 ): Promise<void> {
-  await apiClient.put<ApiEnvelope<null>>(
+  await apiClient.post<ApiEnvelope<null>>(
     "/auth/change-password",
     payload
   );
+}
+
+export async function updateProfile(
+  payload: UpdateProfileRequest
+): Promise<AuthUser> {
+  const response = await apiClient.patch<ApiEnvelope<AuthUser>>(
+    "/auth/me",
+    payload
+  );
+
+  return response.data.data;
 }
