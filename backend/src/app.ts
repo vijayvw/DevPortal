@@ -34,6 +34,7 @@ import { caseStudyRouter } from './modules/case-studies/case-study.routes';
 import { caseStudyAdminRouter } from './modules/case-studies/case-study.admin.routes';
 
 import { contactRouter } from './modules/contact/contact.routes';
+import { contactAdminRouter } from './modules/contact/contact.admin.routes';
 
 import { auditLogRouter } from './modules/audit-log/audit-log.routes';
 
@@ -191,6 +192,11 @@ export function createApp() {
   app.use(
     `${config.server.apiPrefix}/contact`,
     contactRouter,
+  );
+
+  app.use(
+    `${config.server.apiPrefix}/admin/contact`,
+    contactAdminRouter,
   );
 
   app.use(

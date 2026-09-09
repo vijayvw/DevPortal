@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { TerminalHeader } from '../components/TerminalHeader';
 import { useProjects } from '../queries/useProjects';
+import { useRecordProjectView } from '../queries/useProject';
 import { LoadingState } from '../components/states/LoadingState';
 import { ErrorState } from '../components/states/ErrorState';
 import { ProjectDetailsModal } from "../components/projects/ProjectDetailsModal";
@@ -24,6 +25,23 @@ export const Projects = () => {
   const projects = data?.data ?? [];
   const [selectedProject, setSelectedProject] =
   useState<ProjectListItemDto | null>(null);
+
+
+  const viewMutation = useRecordProjectView();
+  const viewedProjectId = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!selectedProject?.id) return;
+
+    if (viewedProjectId.current === selectedProject.id) return;
+
+    viewedProjectId.current = selectedProject.id;
+
+    viewMutation.mutate({
+    id: selectedProject.id,
+    slug: selectedProject.slug,
+  });
+  }, [selectedProject?.id, selectedProject?.slug]);
 
   // Filter tabs are derived from whatever categories actually exist in
   // the live data, rather than the old hardcoded ['all', 'devops'] pair —
@@ -310,7 +328,10 @@ export const Projects = () => {
       <ProjectDetailsModal
         open={!!selectedProject}
         project={selectedProject}
-        onClose={() => setSelectedProject(null)}
+        onClose={() => {
+          viewedProjectId.current = null;
+          setSelectedProject(null);
+        }}
       />
       {!isLoading && !isError && (
         <section className="py-24 bg-bg-elevated">

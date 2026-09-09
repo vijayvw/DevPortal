@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar,
@@ -28,6 +28,7 @@ import {
   useBlogPost,
   useLikeBlog,
   useUnlikeBlog,
+  useViewBlog,
 } from '../../queries/useBlogPosts';
 import { ErrorState } from '../states/ErrorState';
 import { EmptyState } from '../states/EmptyState';
@@ -71,12 +72,12 @@ function toViewModel(dto: BlogPostListItemDto): BlogPostViewModel {
     title: dto.title,
     category: dto.category,
     difficulty: dto.difficulty as BlogPostViewModel['difficulty'],
-    readTime: `${dto.readTimeMinutes} min read`,
+    readTime: `${dto.readTime ?? 0} min read`,
     date: dto.publishedAt ?? '',
     featured: dto.featured,
     views: dto.views ?? 0,
-    likes: dto.likes,
-    comments: dto.commentsCount,
+    likes: dto.likes ?? 0,
+    comments: dto.commentsCount ?? 0,
     excerpt: dto.excerpt,
     tags: dto.tags,
     heroImage: dto.heroImageUrl ?? undefined,
@@ -96,6 +97,22 @@ const EnhancedBlog: React.FC = () => {
   const posts = useMemo(() => (data?.data ?? []).map(toViewModel), [data]);
 
   const detailQuery = useBlogPost(selectedSlug ?? undefined);
+  const viewMutation = useViewBlog();
+
+  const viewedPostId = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!selectedSlug || !detailQuery.data?.id) return;
+
+    if (viewedPostId.current === detailQuery.data.id) return;
+
+    viewedPostId.current = detailQuery.data.id;
+
+    viewMutation.mutate({
+      id: detailQuery.data.id,
+      slug: detailQuery.data.slug,
+    });
+  }, [selectedSlug, detailQuery.data?.id]);
 
   const categories = useMemo(() => {
     const unique = Array.from(new Set(posts.map((p) => p.category)));
@@ -355,7 +372,10 @@ const EnhancedBlog: React.FC = () => {
                         {detailQuery.data && (
                           <BlogPostModalContent
                             post={detailQuery.data}
-                            onClose={() => setSelectedSlug(null)}
+                            onClose={() => {
+                            viewedPostId.current = null;
+                            setSelectedSlug(null);
+                          }}
                           />
                         )}
                       </motion.div>
@@ -563,11 +583,11 @@ function BlogPostModalContent({
               transition={{ duration: 0.25 }}
               onClick={() => {
                 if (liked) {
-                  unlikeMutation.mutate(post.slug);
+                  unlikeMutation.mutate({ id: post.id, slug: post.slug });
                   localStorage.removeItem(likedKey);
                   setLiked(false);
                 } else {
-                  likeMutation.mutate(post.slug);
+                  likeMutation.mutate({ id: post.id, slug: post.slug });
                   localStorage.setItem(likedKey, "true");
                   setLiked(true);
                 }

@@ -52,6 +52,8 @@ export interface ProjectListItemDto {
   featured: boolean;
   coverImageUrl: string | null;
   createdAt: string;
+  views: number;
+  likes: number;
 }
 
 export interface ProjectDetailDto extends ProjectListItemDto {
@@ -79,7 +81,7 @@ export interface BlogPostListItemDto {
   excerpt: string;
   tags: string[];
   heroImageUrl: string | null;
-  readTimeMinutes: number;
+  readTime: number;
   views: number;
   likes: number;
   commentsCount: number;

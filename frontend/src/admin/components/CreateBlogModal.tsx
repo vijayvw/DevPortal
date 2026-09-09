@@ -5,9 +5,7 @@ import RichTextEditor, {
   RichTextEditorRef,
 } from "@/components/editor/RichTextEditor";
 import { useUploadMedia } from "../queries/useUploadMedia";
-import HeroImageCropModal from "../../components/admin/HeroImageCropModal";
-import { getCroppedImg } from "@/utils/imageCrop";
-import { Area } from "react-easy-crop";
+import ImageUploader from "./media/ImageUploader";
 
 function slugify(text: string) {
 
@@ -33,8 +31,7 @@ export default function CreateBlogModal({
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerMode, setPickerMode] = useState<"hero" | "editor">("hero");
   const uploadMutation = useUploadMedia();
-  const [showCropModal, setShowCropModal] = useState(false);
-  const [cropImage, setCropImage] = useState("");
+  
   
 
   const [form, setForm] = useState({
@@ -78,6 +75,16 @@ export default function CreateBlogModal({
       difficulty: form.difficulty,
       excerpt: form.excerpt,
       contentMarkdown: form.contentMarkdown,
+      readTime: Math.max(
+        1,
+        Math.ceil(
+          form.contentMarkdown
+            .replace(/<[^>]*>/g, " ")
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean).length / 200
+        )
+      ),
       featured: form.featured,
 
       tags: form.tags
@@ -190,39 +197,16 @@ export default function CreateBlogModal({
             className="w-full rounded bg-neutral-800 p-3 text-white"
           />
 
-          <div className="space-y-2">
-            <label className="text-white font-medium">
-              Hero Image
-            </label>
-
-            <div className="flex gap-3">
-              <input
-                value={form.heroImage}
-                readOnly
-                placeholder="No image selected"
-                className="flex-1 rounded bg-neutral-800 p-3 text-white"
-              />
-
-              <button
-                type="button"
-                onClick={() => {
-                  setPickerMode("hero");
-                  setPickerOpen(true);
-                }}
-                className="rounded bg-blue-600 px-4 text-white hover:bg-blue-700"
-              >
-                Choose
-              </button>
-            </div>
-
-            {form.heroImage && (
-              <img
-                src={form.heroImage}
-                alt="Preview"
-                className="h-40 rounded border border-neutral-700"
-              />
-            )}
-          </div>
+          <ImageUploader
+            value={form.heroImageId}
+            imageUrl={form.heroImage}
+            onChange={(id) => {
+              setForm((prev) => ({
+                ...prev,
+                heroImageId: id,
+              }));
+            }}
+          />
 
           <RichTextEditor
             ref={editorRef}
@@ -278,42 +262,12 @@ export default function CreateBlogModal({
       <MediaPickerModal
         open={pickerOpen}
         onClose={() => setPickerOpen(false)}
-        onSelect={(url, id) => {
-          if (pickerMode === "hero") {
-            setCropImage(url);
-
-            setPickerOpen(false);
-            setShowCropModal(true);
-
-            return;
-          }
+        onSelect={(url) => {
           editorRef.current?.insertImage(url);
           setPickerOpen(false);
         }}
       />
-    <HeroImageCropModal
-      open={showCropModal}
-      image={cropImage}
-      onCancel={() => setShowCropModal(false)}
-      onApply={async (cropArea: Area) => {
-        console.log("Received crop:", cropArea);
-        const blob = await getCroppedImg(cropImage, cropArea);
-
-        const file = new File([blob], "hero-image.jpg", {
-          type: "image/jpeg",
-        });
-
-        const media = await uploadMutation.mutateAsync(file);
-
-        setForm((prev) => ({
-          ...prev,
-          heroImage: media.url,
-          heroImageId: media.id,
-        }));
-
-        setShowCropModal(false);
-      }}
-    />
+    
     </div>
   );
 }

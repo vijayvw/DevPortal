@@ -18,8 +18,8 @@ export function useRecordProjectView() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: recordProjectView,
-    onSuccess: (_data, slug) => {
+    mutationFn: ({ id }: { id: string; slug: string }) => recordProjectView(id),
+    onSuccess: (_data, { slug }) => {
       queryClient.invalidateQueries({
         queryKey: ["project", slug],
       });
@@ -31,8 +31,10 @@ export function useLikeProject() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: likeProject,
-    onSuccess: (_data, slug) => {
+    mutationFn: ({ id }: { id: string; slug: string }) =>
+      likeProject(id),
+
+    onSuccess: (_data, { slug }) => {
       queryClient.invalidateQueries({
         queryKey: ["project", slug],
       });
@@ -44,8 +46,10 @@ export function useUnlikeProject() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: unlikeProject,
-    onSuccess: (_data, slug) => {
+    mutationFn: ({ id }: { id: string; slug: string }) =>
+      unlikeProject(id),
+
+    onSuccess: (_data, { slug }) => {
       queryClient.invalidateQueries({
         queryKey: ["project", slug],
       });

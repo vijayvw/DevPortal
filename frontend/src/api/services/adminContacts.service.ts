@@ -24,17 +24,20 @@ export interface AdminContact {
 
 export async function getAdminContacts() {
   const response =
-    await apiClient.get<ApiEnvelope<AdminContact[]>>(
-      "/contact"
-    );
+    await apiClient.get<
+      ApiEnvelope<{
+        items: AdminContact[];
+        meta: unknown;
+      }>
+    >("/admin/contact");
 
-  return response.data.data;
+  return response.data.data.items;
 }
 
 export async function getAdminContact(id: string) {
   const response =
     await apiClient.get<ApiEnvelope<AdminContact>>(
-      `/contact/${id}`
+      `/admin/contact/${id}`
     );
 
   return response.data.data;
@@ -45,7 +48,7 @@ export async function updateContactStatus(
   status: ContactStatus
 ) {
   const response = await apiClient.patch(
-    `/contact/${id}/status`,
+    `/admin/contact/${id}`,
     { status }
   );
 
@@ -54,7 +57,8 @@ export async function updateContactStatus(
 
 export async function markContactReplied(id: string) {
   const response = await apiClient.patch(
-    `/contact/${id}/reply`
+    `/admin/contact/${id}`,
+    { repliedAt: new Date().toISOString() }
   );
 
   return response.data.data;

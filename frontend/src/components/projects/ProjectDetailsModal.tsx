@@ -6,7 +6,6 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import {
   useProject,
-  useRecordProjectView,
   useLikeProject,
   useUnlikeProject,
 } from "../../queries/useProject";
@@ -45,12 +44,11 @@ export function ProjectDetailsModal({
   ARCHIVED: "bg-neutral-700 text-neutral-300",
 };
 
-  const recordView = useRecordProjectView();
+  
   const likeMutation = useLikeProject();
   const unlikeMutation = useUnlikeProject();
 
   const likedKey = `liked-project-${project?.slug}`;
-  const viewedKey = `viewed-project-${project?.slug}`;
 
   const [liked, setLiked] = useState(false);
 
@@ -78,16 +76,6 @@ export function ProjectDetailsModal({
       window.removeEventListener("keydown", handler);
     };
   }, [open, onClose]);
-
-  useEffect(() => {
-  if (!open || !project?.slug) return;
-
-  if (localStorage.getItem(viewedKey)) return;
-
-  recordView.mutate(project.slug);
-
-  localStorage.setItem(viewedKey, "true");
-}, [open, project, viewedKey]);
 
 console.log("LONG DESCRIPTION:");
 console.log(data?.longDescription);
@@ -184,7 +172,7 @@ console.log(data?.longDescription);
                             "bg-neutral-700 text-neutral-300"
                           }`}
                         >
-                          {data.status.replace(/_/g, " ")}
+                          {(data.status ?? "Unknown").replace(/_/g, " ")}
                         </span>
 
                       </div>
@@ -195,63 +183,77 @@ console.log(data?.longDescription);
 
                       <div className="mt-3 flex flex-wrap items-center gap-6 text-sm text-neutral-300">
 
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          {new Date(data.createdAt).toLocaleDateString()}
-                        </div>
-
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          {calculateReadingTime(
-                            `${data.shortDescription ?? ""} ${data.longDescription ?? ""}`
-                          )}{" "}
-                          min read
-                        </div>
-
-
-                        <motion.button
-                          whileTap={{ scale: 0.85 }}
-                          animate={
-                            liked
-                              ? {
-                                  scale: [1, 1.25, 1],
-                                }
-                              : {
-                                  scale: 1,
-                                }
-                          }
-                          transition={{ duration: 0.25 }}
-                          onClick={() => {
-                            if (!project?.slug) return;
-
-                            if (liked) {
-                              unlikeMutation.mutate(project.slug);
-                              localStorage.removeItem(likedKey);
-                              setLiked(false);
-                            } else {
-                              likeMutation.mutate(project.slug);
-                              localStorage.setItem(likedKey, "true");
-                              setLiked(true);
-                            }
-                          }}
-                          className={`flex items-center gap-2 rounded-full px-3 py-1 transition-all duration-300 ${
-                            liked
-                              ? "bg-green-500/20 text-green-400 shadow-lg shadow-green-500/20"
-                              : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-                          }`}
-                        >
-                          <Heart
-                            size={18}
-                            className={`transition-all duration-300 ${
-                              liked ? "fill-green-400 text-green-400" : ""
-                            }`}
-                          />
-                            <span>
-  {liked ? "Liked" : "Like"}
-</span>
-                        </motion.button>
-
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        {new Date(data.createdAt).toLocaleDateString()}
                       </div>
+
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        {calculateReadingTime(
+                          `${data.shortDescription ?? ""} ${data.longDescription ?? ""}`
+                        )}{" "}
+                        min read
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <span>👁</span>
+                        <span>{data.views ?? 0} views</span>
+                      </div>
+
+                     
+
+                      <motion.button
+                        whileTap={{ scale: 0.85 }}
+                        animate={
+                          liked
+                            ? {
+                                scale: [1, 1.25, 1],
+                              }
+                            : {
+                                scale: 1,
+                              }
+                        }
+                        transition={{ duration: 0.25 }}
+                        onClick={() => {
+                          if (!data?.id || !data?.slug) return;
+
+                          if (liked) {
+                            unlikeMutation.mutate({
+                              id: data.id,
+                              slug: data.slug,
+                            });
+
+                            localStorage.removeItem(likedKey);
+                            setLiked(false);
+                          } else {
+                            likeMutation.mutate({
+                              id: data.id,
+                              slug: data.slug,
+                            });
+
+                            localStorage.setItem(likedKey, "true");
+                            setLiked(true);
+                          }
+                        }}
+                        className={`flex items-center gap-2 rounded-full px-3 py-1 transition-all duration-300 ${
+                          liked
+                            ? "bg-green-500/20 text-green-400 shadow-lg shadow-green-500/20"
+                            : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+                        }`}
+                      >
+                        <Heart
+                          size={18}
+                          className={`transition-all duration-300 ${
+                            liked ? "fill-green-400 text-green-400" : ""
+                          }`}
+                        />
+
+                        <span>{data.likes ?? 0}</span>
+                        <span>{liked ? "Liked" : "Like"}</span>
+                      </motion.button>
+
+                    </div>
 
                     </div>
 

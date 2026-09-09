@@ -35,6 +35,7 @@ export interface CreateBlogRequest {
   difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
   excerpt: string;
   contentMarkdown: string;
+  readTime?: number;
   featured: boolean;
   tags: string[];
   heroImageId?: string;

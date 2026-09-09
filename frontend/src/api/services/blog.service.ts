@@ -33,10 +33,10 @@ export async function viewBlog(id: string): Promise<void> {
   await apiClient.post(`/blog/${id}/view`);
 }
 
-export async function likeBlog(slug: string): Promise<void> {
-  await apiClient.post(`/blog/${slug}/like`);
+export async function likeBlog(id: string): Promise<void> {
+  await apiClient.post(`/blog/${id}/like`);
 }
 
-export async function unlikeBlog(slug: string): Promise<void> {
-  await apiClient.delete(`/blog/${slug}/like`);
+export async function unlikeBlog(id: string): Promise<void> {
+  await apiClient.delete(`/blog/${id}/like`);
 }

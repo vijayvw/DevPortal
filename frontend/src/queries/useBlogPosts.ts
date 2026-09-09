@@ -32,12 +32,14 @@ export function useLikeBlog() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (slug: string) => likeBlog(slug),
+    mutationFn: ({ id }: { id: string; slug: string }) => likeBlog(id),
 
-    onSuccess: (_data, slug) => {
-
+    onSuccess: (_data, { slug }) => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.blogPosts.list({}),
+        queryKey: queryKeys.blogPosts.detail(slug),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.blogPosts.all,
       });
     },
   });
@@ -47,19 +49,32 @@ export function useUnlikeBlog() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (slug: string) => unlikeBlog(slug),
+    mutationFn: ({ id }: { id: string; slug: string }) => unlikeBlog(id),
 
-    onSuccess: (_data, slug) => {
-
+    onSuccess: (_data, { slug }) => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.blogPosts.list({}),
+        queryKey: queryKeys.blogPosts.detail(slug),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.blogPosts.all,
       });
     },
   });
 }
 
 export function useViewBlog() {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (id: string) => viewBlog(id),
+    mutationFn: ({ id }: { id: string; slug: string }) => viewBlog(id),
+
+    onSuccess: (_data, { slug }) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.blogPosts.detail(slug),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.blogPosts.all,
+      });
+    },
   });
 }

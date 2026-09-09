@@ -39,7 +39,12 @@ export class BlogPostService {
       throw new NotFoundError('Blog post not found');
     }
 
-    return this.attachHeroImage(post);
+    return this.attachHeroImage({
+      ...post,
+      views: post.views ?? 0,
+      likes: post.likes ?? 0,
+      commentsCount: post.commentsCount ?? 0,
+    });
   }
 
   async getPublicBySlug(slug: string) {
@@ -52,7 +57,12 @@ export class BlogPostService {
       throw new NotFoundError('Blog post not found');
     }
 
-    return this.attachHeroImage(post);
+    return this.attachHeroImage({
+      ...post,
+      views: post.views ?? 0,
+      likes: post.likes ?? 0,
+      commentsCount: post.commentsCount ?? 0,
+    });
   }
 
   async incrementViews(id: string) {
@@ -81,7 +91,12 @@ export class BlogPostService {
       throw new NotFoundError('Blog post not found');
     }
 
-    return this.attachHeroImage(post);
+    return this.attachHeroImage({
+      ...post,
+      views: post.views ?? 0,
+      likes: post.likes ?? 0,
+      commentsCount: post.commentsCount ?? 0,
+    });
   }
 
   async create(data: any) {

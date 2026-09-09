@@ -5,12 +5,24 @@ export class ContactMessageService {
   async create(data: any) {
     return contactMessageRepository.create({
       ...data,
-      status: data.status ?? 'NEW',
+      status: 'UNREAD',
+      repliedAt: null,
     });
   }
 
   async list(options = {}) {
-    return contactMessageRepository.findAll(options as any);
+    const result = await contactMessageRepository.findAll(options as any);
+
+    return {
+      ...result,
+      items: result.items.map((item) => ({
+        ...item,
+        status:
+          item.status === 'NEW'
+            ? 'UNREAD'
+            : item.status,
+      })),
+    };
   }
 
   async get(id: string) {
@@ -20,7 +32,13 @@ export class ContactMessageService {
       throw new NotFoundError('Contact message not found');
     }
 
-    return item;
+    return {
+      ...item,
+      status:
+        item.status === 'NEW'
+          ? 'UNREAD'
+          : item.status,
+    };
   }
 
   async update(id: string, data: any) {
@@ -30,7 +48,13 @@ export class ContactMessageService {
       throw new NotFoundError('Contact message not found');
     }
 
-    return item;
+    return {
+      ...item,
+      status:
+        item.status === 'NEW'
+          ? 'UNREAD'
+          : item.status,
+    };
   }
 }
 

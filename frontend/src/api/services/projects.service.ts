@@ -28,14 +28,14 @@ export async function getProjectBySlug(slug: string): Promise<ProjectDetailDto> 
   return response.data.data;
 }
 
-export async function recordProjectView(slug: string): Promise<void> {
-  await apiClient.post(`/projects/${slug}/view`);
+export async function recordProjectView(id: string): Promise<void> {
+  await apiClient.post(`/projects/${id}/view`);
 }
 
-export async function likeProject(slug: string): Promise<void> {
-  await apiClient.post(`/projects/${slug}/like`);
+export async function likeProject(id: string): Promise<void> {
+  await apiClient.post(`/projects/${id}/like`);
 }
 
-export async function unlikeProject(slug: string): Promise<void> {
-  await apiClient.delete(`/projects/${slug}/like`);
+export async function unlikeProject(id: string): Promise<void> {
+  await apiClient.delete(`/projects/${id}/like`);
 }
