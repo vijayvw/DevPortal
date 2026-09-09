@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { ExternalLink, Github, Code2 } from 'lucide-react';
 import { Grid3DBackground } from '../components/Grid3D';
 import { Typewriter } from '../components/Typewriter';
-import { HERO_CONTENT } from '../data/portfolio';
 import { useSkills } from '../queries/useSkills';
 import { useProjects } from '../queries/useProjects';
 import { LoadingState } from '../components/states/LoadingState';
@@ -88,7 +87,7 @@ export const Home = () => {
 
             {/* Typewriter heading */}
             <div className="font-mono text-4xl md:text-6xl lg:text-8xl font-bold tracking-tight text-primary-500">
-              <Typewriter text="DevOps & Cloud Engineer" delay={80} />
+              <Typewriter text={settings?.portfolioTitle ?? "DevOps & Cloud Engineer"} delay={80} />
               <span className="terminal-cursor ml-2" />
             </div>
 
@@ -99,7 +98,7 @@ export const Home = () => {
               transition={{ delay: 2 }}
               className="text-xl md:text-2xl text-neutral-200 max-w-4xl mx-auto leading-relaxed"
             >
-              {HERO_CONTENT}
+              {settings?.tagline ?? "Aspiring DevOps & Cloud Security Engineer passionate about building scalable infrastructure, automating deployments, and continuously learning modern cloud-native technologies."}
             </motion.p>
 
             {/* CTA Buttons */}
