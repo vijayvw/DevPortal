@@ -21,12 +21,6 @@ import { usePublicSettings } from '../hooks/usePublicSettings';
 // replaced with name-based lookup against live data, since index-based
 // selection isn't safe against a data source whose order isn't
 // guaranteed to match the old static array).
-const FEATURED_SKILL_NAMES = [
-  'Red Hat', 'AWS', 'Docker', 'Kubernetes', 'Terraform','Jenkins',
-  'Kali Linux', 'Wireshark', 'Burp Suite', 'Metasploit', 'Hydra','Nmap'
-];
-
-
 
   
 export const Home = () => {
@@ -43,9 +37,13 @@ export const Home = () => {
   const { data: skills, isLoading: skillsLoading, isError: skillsError, error: skillsErrorObj, refetch: refetchSkills } = useSkills();
   const { data: projectsData } = useProjects({ limit: 1 });
 
-  const featuredSkills = FEATURED_SKILL_NAMES
-    .map((name) => skills?.find((s) => s.name === name))
-    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+  const featuredSkills = (skills ?? [])
+    .filter((skill) => skill.featured)
+    .sort(
+      (a, b) =>
+        a.priority - b.priority ||
+        a.name.localeCompare(b.name)
+    );
 
   const stats = [
     {
@@ -78,7 +76,7 @@ export const Home = () => {
 
                h-[700px] w-[700px] rounded-full
 
-               bg-primary-500/10
+               bg-primary-500/10 home-hero-glow
                 blur-[140px]"
 
   />
@@ -100,7 +98,7 @@ export const Home = () => {
             </div>
 
             {/* Typewriter heading */}
-            <div className="font-mono text-4xl md:text-6xl lg:text-8xl font-bold tracking-tight text-primary-500">
+            <div className="font-mono text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-bold tracking-tight text-primary-500 break-words">
               <Typewriter text={settings?.portfolioTitle ?? "DevOps & Cloud Engineer"} delay={80} />
               <span className="terminal-cursor ml-2" />
             </div>
@@ -110,7 +108,7 @@ export const Home = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2 }}
-              className="text-xl md:text-2xl text-neutral-200 max-w-4xl mx-auto leading-relaxed"
+              className="text-base sm:text-lg md:text-xl text-neutral-200 max-w-4xl mx-auto leading-relaxed px-2"
             >
               {settings?.tagline ?? "DevOps Engineer | Cloud Engineer | Cloud Security Enthusiast"}
             </motion.p>
@@ -120,7 +118,7 @@ export const Home = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2.2 }}
-              className="mt-3 text-base md:text-lg text-neutral-400 max-w-3xl mx-auto leading-relaxed"
+              className="mt-3 text-sm sm:text-base md:text-lg text-neutral-400 max-w-3xl mx-auto leading-relaxed px-2"
             >
               {settings?.shortDescription ?? "Aspiring DevOps & Cloud Security Engineer passionate about building scalable infrastructure, automating deployments, and continuously learning modern cloud-native technologies."}
             </motion.p>
@@ -134,14 +132,14 @@ export const Home = () => {
             >
               <Link
                 to="/projects"
-                className="group inline-flex items-center px-8 py-4 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-bg-surface transition-all duration-200 font-semibold tracking-wide rounded-lg shadow-glow hover:shadow-card-hover"
+                className="group inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-bg-surface transition-all duration-200 font-semibold tracking-wide rounded-lg shadow-glow hover:shadow-card-hover"
               >
                 <Code2 className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 View Projects
               </Link>
               <Link
                 to="/contact"
-                className="group inline-flex items-center px-8 py-4 border-2 border-neutral-600 bg-neutral-800 text-neutral-200 hover:border-primary-500 hover:text-primary-500 transition-all duration-200 font-semibold tracking-wide rounded-lg"
+                className="theme-secondary-button group inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 border-2 text-neutral-200 hover:border-primary-500 hover:text-primary-500 transition-all duration-200 font-semibold tracking-wide rounded-lg"
               >
                 <ExternalLink className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 Contact Me
@@ -159,7 +157,7 @@ export const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+            className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8"
           >
             {stats.map((stat, index) => (
               <motion.div
@@ -170,11 +168,11 @@ export const Home = () => {
                 viewport={{ once: true }}
                 className="text-center"
               >
-                <div className="bg-[#080D10]/90 border border-neutral-800 p-6 rounded-xl shadow-card hover:border-primary-500/40 hover:-translate-y-1 transition-all duration-300">
-                  <div className="font-mono text-3xl md:text-4xl font-bold text-primary-500 mb-2">
+                <div className="theme-card p-4 sm:p-6 rounded-xl shadow-card hover:border-primary-500/40 hover:-translate-y-1 transition-all duration-300">
+                  <div className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold text-primary-500 mb-2">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-neutral-400 font-medium">
+                  <div className="text-xs sm:text-sm text-neutral-400 font-medium">
                     {stat.label}
                   </div>
                 </div>
@@ -219,7 +217,7 @@ export const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, staggerChildren: 0.1 }}
               viewport={{ once: true }}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6"
             >
               {featuredSkills.map((skill, index) => (
                 <motion.div
@@ -229,14 +227,14 @@ export const Home = () => {
                   transition={{ delay: index * 0.05, duration: 0.4 }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className="bg-[#080D10]/90 border border-neutral-800 p-4 rounded-xl text-center hover:border-primary-500/50 hover:-translate-y-1 transition-all duration-300 group"
+                  className="theme-card p-3 sm:p-4 rounded-xl text-center hover:border-primary-500/50 hover:-translate-y-1 transition-all duration-300 group"
                 >
                   <img
                     src={skill.iconUrl ?? undefined}
                     alt={skill.name}
-                    className="w-10 h-10 mx-auto mb-3 object-contain transition-all duration-300 group-hover:scale-110"
+                    className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 sm:mb-3 object-contain transition-all duration-300 group-hover:scale-110"
                   />
-                  <div className="font-mono text-sm text-neutral-200 font-medium">
+                  <div className="font-mono text-xs sm:text-sm text-neutral-200 font-medium break-words">
                     {skill.name}
                   </div>
                 </motion.div>
@@ -270,12 +268,12 @@ export const Home = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="bg-[#080D10] border border-neutral-800 p-12 rounded-2xl shadow-card hover:border-primary-500/30 transition-all duration-300"
+            className="theme-cta border p-12 rounded-2xl shadow-card hover:border-primary-500/30 transition-all duration-300"
           >
             <h2 className="font-mono text-3xl md:text-4xl font-bold text-primary-500 mb-6">
               Ready to Deploy Your Vision?
             </h2>
-            <p className="text-xl text-neutral-200 mb-8 leading-relaxed">
+            <p className="theme-cta-text text-xl mb-8 leading-relaxed">
               Let's build something amazing together. From infrastructure automation to Cloud Securiy,
               I'm here to turn your ideas into production reality.
             </p>
@@ -287,7 +285,7 @@ export const Home = () => {
       window.scrollTo(0, 0);
     });
   }}
-  className="inline-flex items-center justify-center px-8 py-4 border-2 border-neutral-700 text-neutral-200 hover:border-primary-500 hover:text-primary-500 font-semibold rounded-lg transition-all duration-200"
+  className="theme-cta-button inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 hover:border-primary-500 hover:text-primary-500 font-semibold rounded-lg transition-all duration-200"
 >
   Start a Project
 </button>
@@ -295,7 +293,7 @@ export const Home = () => {
                 href={settings?.github ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-neutral-600 text-neutral-200 hover:border-primary-500 hover:text-primary-500 font-semibold rounded-lg transition-all duration-200"
+                className="theme-cta-button inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 hover:border-primary-500 hover:text-primary-500 font-semibold rounded-lg transition-all duration-200"
               >
                 <Github className="mr-2 h-5 w-5" />
                 View Code

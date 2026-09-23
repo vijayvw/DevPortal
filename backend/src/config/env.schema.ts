@@ -43,6 +43,8 @@ export const envSchema = z.object({
 
   AWS_S3_BUCKET: z.string().optional(),
 
+  MEDIA_BASE_URL: z.string().url().optional(),
+
   UPLOAD_DRIVER: z
     .enum(['local', 's3'])
     .default('local'),

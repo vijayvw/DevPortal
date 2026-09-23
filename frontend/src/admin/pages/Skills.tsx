@@ -190,6 +190,7 @@ export default function Skills() {
                 <th className="p-3">Name</th>
                 <th className="p-3">Category</th>
                 <th className="p-3">Level</th>
+                <th className="p-3">Featured on Home</th>
                 <th className="p-3">Actions</th>
               </tr>
             </thead>
@@ -213,6 +214,18 @@ export default function Skills() {
 
                   <td className="p-3">
                     {skill.proficiency}
+                  </td>
+
+                  <td className="p-3">
+                    {skill.featured ? (
+                      <span className="text-green-400 font-semibold">
+                        Yes
+                      </span>
+                    ) : (
+                      <span className="text-neutral-500">
+                        No
+                      </span>
+                    )}
                   </td>
 
                   <td className="p-3 space-x-2">

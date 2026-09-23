@@ -21,6 +21,7 @@ export interface Skill {
   yearsExperience: number | null;
   priority: number;
   visible: boolean;
+  featured: boolean;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -36,6 +37,7 @@ export interface SkillCreateInput {
   yearsExperience?: number | null;
   priority?: number;
   visible?: boolean;
+  featured?: boolean;
 }
 
 export interface SkillUpdateInput {
@@ -47,6 +49,7 @@ export interface SkillUpdateInput {
   yearsExperience?: number | null;
   priority?: number;
   visible?: boolean;
+  featured?: boolean;
 }
 
 export interface SkillFilters {
@@ -66,6 +69,7 @@ function toSkill(item: Record<string, any>): Skill {
     yearsExperience: item.yearsExperience ?? null,
     priority: item.priority ?? 0,
     visible: item.visible ?? true,
+    featured: item.featured ?? false,
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     deletedAt: item.deletedAt ?? null,
@@ -269,6 +273,7 @@ export class SkillDynamoDBRepository {
       yearsExperience: data.yearsExperience ?? null,
       priority,
       visible: data.visible ?? true,
+      featured: data.featured ?? false,
 
       createdAt: now,
       updatedAt: now,

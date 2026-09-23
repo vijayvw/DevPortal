@@ -2,39 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* =========================================================
+   DEVPORTAL
+   GLOBAL / SHARED STYLES
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   THEME VARIABLES
+   Dark theme is the current/default theme.
+   Light theme will be added separately later.
+   --------------------------------------------------------- */
+
+:root {
+  --theme-page: #000000;
+  --theme-surface: #000000;
+  --theme-elevated: #0a0e11;
+  --theme-text: #c5cdd3;
+  --theme-text-muted: #7a8894;
+  --theme-border: #1e272e;
+}
+
+/* ---------------------------------------------------------
+   LIGHT THEME VARIABLES
+   --------------------------------------------------------- */
+
+html:not(.dark) {
+  --theme-page: #eef2f5;
+  --theme-surface: #ffffff;
+  --theme-elevated: #f7f9fa;
+  --theme-text: #17202a;
+  --theme-text-muted: #64748b;
+  --theme-border: #d7e0e6;
+}
+
+/* ---------------------------------------------------------
+   PUBLIC SITE THEME BACKGROUND
+   --------------------------------------------------------- */
+
+html:not(.dark) .public-site {
+  background-color: var(--theme-page) !important;
+  color: var(--theme-text) !important;
+}
+
+html:not(.dark) body {
+  background-color: var(--theme-page);
+  color: var(--theme-text);
+}
+
+
+/* ---------------------------------------------------------
+   BASE
+   --------------------------------------------------------- */
+
 @layer base {
   :root {
     --radius: 0.5rem;
   }
 }
 
+
+/* ---------------------------------------------------------
+   IMAGES
+   --------------------------------------------------------- */
+
 img {
   object-position: top;
 }
 
-.fixed {
-  position: fixed;
+
+/* ---------------------------------------------------------
+   PUBLIC THEME TRANSITION
+   --------------------------------------------------------- */
+
+.public-site,
+.public-site * {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
 }
 
-/* Custom animations for enhanced components */
+
+/* ---------------------------------------------------------
+   CUSTOM ANIMATIONS
+   --------------------------------------------------------- */
+
 @keyframes grid-move {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(50px, 50px);
+  }
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+  }
 }
 
 .animate-grid-move {
@@ -57,7 +150,11 @@ img {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
-/* Text truncation utilities */
+
+/* ---------------------------------------------------------
+   TEXT TRUNCATION
+   --------------------------------------------------------- */
+
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -79,7 +176,118 @@ img {
   overflow: hidden;
 }
 
-/* Custom scrollbar for cyber theme */
+
+/* ---------------------------------------------------------
+   TIPTAP EDITOR
+   --------------------------------------------------------- */
+
+.editor-content img {
+  display: block !important;
+  margin: 2rem auto !important;
+  max-width: 80% !important;
+  height: auto !important;
+  border-radius: 12px;
+  border: 1px solid #404040;
+  object-fit: contain;
+}
+
+.editor-content p {
+  text-align: left;
+}
+
+.editor-content p:has(img) {
+  text-align: center;
+}
+
+.editor-content p img {
+  display: inline-block;
+  max-width: 80%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid #404040;
+}
+
+
+/* ---------------------------------------------------------
+   PROJECT CONTENT
+   --------------------------------------------------------- */
+
+.project-content img {
+  display: block !important;
+  margin: 2rem auto !important;
+  max-width: 80% !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 12px;
+  border: 1px solid #404040;
+}
+
+.project-content p {
+  line-height: 1.8;
+}
+
+.project-content p:has(img) {
+  text-align: center;
+}
+
+
+/* ---------------------------------------------------------
+   MARKDOWN CONTENT
+   --------------------------------------------------------- */
+
+.markdown-body {
+  font-size: 16px;
+  line-height: 1.8;
+  background: transparent !important;
+}
+
+.markdown-body pre {
+  overflow-x: auto;
+}
+
+.markdown-body table {
+  display: block;
+  overflow-x: auto;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.markdown-body p img {
+  display: inline-block;
+  margin: 4px;
+  vertical-align: middle;
+}
+
+
+/* =========================================================
+   🌙 DARK THEME
+   EXISTING DEVPORTAL DESIGN
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   DARK PAGE
+   --------------------------------------------------------- */
+
+body {
+  background-color: #000000;
+  color: #c5cdd3;
+}
+
+.public-site {
+  background-color: #000000;
+  color: #c5cdd3;
+}
+
+
+/* ---------------------------------------------------------
+   DARK SCROLLBAR
+   --------------------------------------------------------- */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -97,101 +305,602 @@ img {
   background: #16a34a;
 }
 
-/* ==========================================
-   TipTap Editor Image Styling
-========================================== */
 
-.editor-content img {
-  display: block !important;
-  margin: 2rem auto !important;
-  max-width: 80% !important;
-  height: auto !important;
+/* ---------------------------------------------------------
+   HOME
+   --------------------------------------------------------- */
 
-  border-radius: 12px;
-  border: 1px solid #404040;
-
-  object-fit: contain;
+.theme-card {
+  background-color: #050809;
+  border: 1px solid #1e272e;
 }
 
-/* ==========================================
-
-   TipTap Editor Image Alignment
-
-========================================== */
-
-.editor-content p {
-  text-align: left;
-}
-.editor-content p:has(img) {
-  text-align: center;
+.theme-secondary-button {
+  background-color: #050809;
+  border-color: #1e272e;
 }
 
-.editor-content p img {
-  display: inline-block;
-  max-width: 80%;
-  height: auto;
-  border-radius: 12px;
-  border: 1px solid #404040;
+
+/* ---------------------------------------------------------
+   FOOTER
+   --------------------------------------------------------- */
+
+.public-footer {
+  background-color: #020303;
+  border-color: #0b3d20;
 }
 
-/* ==========================================
-   Project Content Styling
-========================================== */
-
-.project-content img {
-  display: block !important;
-  margin: 2rem auto !important;
-  max-width: 80% !important;
-  width: auto !important;
-  height: auto !important;
-
-  border-radius: 12px;
-  border: 1px solid #404040;
+.theme-social-button {
+  background-color: #000000;
+  border-color: #141b20;
 }
 
-.project-content p:has(img) {
-  text-align: center;
+.theme-tech-badge {
+  background-color: #141b20;
 }
 
-.project-content p {
-  color: #d4d4d4;
-  line-height: 1.8;
-}
-.markdown-body {
-  background: transparent !important;
-  color: #e5e5e5 !important;
-  font-size: 16px;
-  line-height: 1.8;
+
+/* ---------------------------------------------------------
+   CONTACT
+   --------------------------------------------------------- */
+
+.theme-panel {
+  background-color: #030506;
+  border-color: #374151;
 }
 
-.markdown-body pre {
-  background: #111827 !important;
+.theme-input {
+  background-color: #0a0e11;
+  color: #c5cdd3;
 }
 
-.markdown-body code {
-  background: rgba(255,255,255,0.08);
+.theme-icon-box {
+  background-color: #000000;
+  border-color: #141b20;
 }
 
-.markdown-body table {
-  display: block;
-  overflow-x: auto;
+
+/* ---------------------------------------------------------
+   PROJECTS
+   --------------------------------------------------------- */
+
+.theme-image-placeholder {
+  background-color: #141b20;
 }
 
-.markdown-body img {
-  max-width: 100%;
-  border-radius: 12px;
+
+/* ---------------------------------------------------------
+   HOME CTA
+   --------------------------------------------------------- */
+
+.theme-cta {
+  background-color: #050809;
+  border-color: #1e272e;
 }
 
-.markdown-body a {
+.theme-cta-text {
+  color: #c5cdd3;
+}
+
+.theme-cta-button {
+  border-color: #2d3841;
+  color: #c5cdd3;
+}
+
+
+/* ---------------------------------------------------------
+   ABOUT
+   --------------------------------------------------------- */
+
+.theme-about-panel {
+  background-color: #000000;
+  border-color: #141b20;
+}
+
+.theme-specialization {
+  background-color: #080d10;
+  border-color: #141b20;
+  color: #c5cdd3;
+}
+
+.theme-about-timeline {
+  background-color: #000000;
+}
+
+.theme-timeline-card {
+  background-color: #050809;
+  border-color: #1e272e;
+}
+
+.theme-timeline-title {
+  color: #e5e7eb;
+}
+
+.theme-timeline-description {
+  color: #9ca3af;
+}
+
+.theme-about-card {
+  background-color: #11181c;
+  border-color: #404040;
+}
+
+.theme-about-text {
+  color: #e5e7eb;
+}
+
+.theme-about-side-card {
+  background-color: #000000;
+  border-color: #404040;
+}
+
+.theme-about-muted {
+  color: #9ca3af;
+}
+
+
+/* ---------------------------------------------------------
+   TERMINAL HEADER
+   --------------------------------------------------------- */
+
+.theme-terminal-header {
+  background-color: #020604;
+  border-bottom-color: #0b3d20;
+}
+
+.theme-terminal-description {
+  color: #9ca3af;
+}
+
+.theme-skill-category-icon {
+  background-color: #070101;
+}
+
+
+/* ---------------------------------------------------------
+   PROJECT DETAILS MODAL
+   --------------------------------------------------------- */
+
+.theme-project-modal {
+  background-color: #080d10;
+  border-color: #1e272e;
+  color: #c5cdd3;
+}
+
+.theme-project-modal-content {
+  color: #c5cdd3;
+}
+
+.theme-project-modal-heading {
+  color: #e5e7eb;
+}
+
+.theme-project-modal-text {
+  color: #c5cdd3;
+}
+
+.theme-project-modal-muted {
+  color: #9ca3af;
+}
+
+.theme-project-modal-badge {
+  background-color: #141b20;
+  border-color: #2d3841;
+  color: #c5cdd3;
+}
+
+.theme-project-modal-button {
+  background-color: #141b20;
+  color: #e5e7eb;
+}
+
+.theme-project-modal-button-outline {
+  border-color: #2d3841;
+  color: #c5cdd3;
+}
+
+.theme-project-modal-code {
+  background-color: #0a0e11;
+  border-color: #1e272e;
+}
+
+
+/* ---------------------------------------------------------
+   PROJECT MODAL MARKDOWN
+   --------------------------------------------------------- */
+
+.theme-project-modal .markdown-body {
+  color: #c5cdd3;
+}
+
+.theme-project-modal .markdown-body h1,
+.theme-project-modal .markdown-body h2,
+.theme-project-modal .markdown-body h3,
+.theme-project-modal .markdown-body h4,
+.theme-project-modal .markdown-body h5,
+.theme-project-modal .markdown-body h6 {
+  color: #e5e7eb;
+}
+
+.theme-project-modal .markdown-body p,
+.theme-project-modal .markdown-body li {
+  color: #c5cdd3;
+}
+
+.theme-project-modal .markdown-body strong {
+  color: #e5e7eb;
+}
+
+.theme-project-modal .markdown-body blockquote {
+  color: #9ca3af;
+  border-left-color: #22c55e;
+}
+
+.theme-project-modal .markdown-body hr {
+  border-color: #404040;
+}
+
+.theme-project-modal .markdown-body a {
   color: #60a5fa;
 }
-.markdown-body p img {
-  display: inline-block;
-  margin: 4px;
-  vertical-align: middle;
+
+.theme-project-modal .markdown-body code:not(pre code) {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
 }
 
-.markdown-body img {
-  max-width: 100%;
-  height: auto;
+
+/* ---------------------------------------------------------
+   PROJECT MODAL HERO
+   --------------------------------------------------------- */
+
+.theme-project-modal-hero-title {
+  color: #ffffff !important;
 }
+
+.theme-project-modal-hero-muted {
+  color: #d1d5db !important;
+}
+
+
+/* ---------------------------------------------------------
+   PROJECT FILTERS
+   --------------------------------------------------------- */
+
+.theme-filter-label {
+  color: #c5cdd3;
+}
+
+.theme-filter-checkbox {
+  accent-color: #00ff41;
+}
+
+.theme-filter-button {
+  background-color: #0a0e11;
+  color: #c5cdd3;
+  border: 1px solid #1e272e;
+}
+
+.theme-filter-count {
+  background-color: #141b20;
+  color: #9ca3af;
+}
+
+
+/* ---------------------------------------------------------
+   CONTACT AVAILABILITY
+   --------------------------------------------------------- */
+
+.theme-availability {
+  background-color: #030506;
+  border-color: #1e272e;
+}
+
+.theme-availability-text {
+  color: #c5cdd3;
+}
+
+.theme-availability-muted {
+  color: #9ca3af;
+}
+
+
+/* ---------------------------------------------------------
+   BLOG
+   --------------------------------------------------------- */
+
+.theme-blog-card {
+  background-color: #050809;
+  border-color: #1e272e;
+}
+
+.theme-blog-title {
+  color: #e5e7eb;
+}
+
+.theme-blog-muted {
+  color: #9ca3af;
+}
+
+.theme-blog-input {
+  background-color: #050809;
+  color: #e5e7eb;
+  border-color: #1e272e;
+}
+
+.theme-blog-input::placeholder {
+  color: #6b7280;
+}
+
+.theme-blog-filter {
+  background-color: #050809;
+  color: #4ade80;
+  border: 1px solid #1e272e;
+}
+
+.theme-blog-filter:hover {
+  border-color: #4ade80;
+}
+
+.theme-blog-view-toggle {
+  background-color: #050809;
+  border: 1px solid #1e272e;
+}
+
+.theme-blog-view-button {
+  color: #9ca3af;
+}
+
+.theme-blog-view-button:hover {
+  color: #4ade80;
+}
+
+.theme-blog-sort {
+  background-color: #050809;
+  color: #e5e7eb;
+  border-color: #1e272e;
+}
+
+
+/* ---------------------------------------------------------
+   BLOG DETAILS MODAL
+   --------------------------------------------------------- */
+
+.theme-blog-modal {
+  background-color: #080d10;
+  border-color: #303942;
+  color: #c5cdd3;
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.18);
+}
+
+.theme-blog-modal-heading {
+  color: #e5e7eb;
+}
+
+.theme-blog-modal-text {
+  color: #c5cdd3;
+}
+
+.theme-blog-modal-muted {
+  color: #9ca3af;
+}
+
+.theme-blog-modal-tag {
+  background-color: #141b20;
+  border-color: #2d3841;
+  color: #4ade80;
+}
+
+
+/* ---------------------------------------------------------
+   BLOG ARTICLE
+   --------------------------------------------------------- */
+
+.theme-blog-modal-article {
+  color: #c5cdd3;
+}
+
+.theme-blog-modal-article h1,
+.theme-blog-modal-article h2,
+.theme-blog-modal-article h3,
+.theme-blog-modal-article h4,
+.theme-blog-modal-article h5,
+.theme-blog-modal-article h6 {
+  color: #e5e7eb;
+}
+
+.theme-blog-modal-article strong,
+.theme-blog-modal-article b {
+  color: #e5e7eb !important;
+}
+
+.theme-blog-modal-article a {
+  color: #60a5fa !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(96, 165, 250, 0.6) !important;
+  text-underline-offset: 3px;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+.theme-blog-modal-article a:hover {
+  color: #93c5fd !important;
+  text-decoration-color: #93c5fd !important;
+}
+
+
+/* ---------------------------------------------------------
+   BLOG MODAL HERO
+   --------------------------------------------------------- */
+
+.theme-blog-modal-hero-fallback {
+  background-color: #090d10;
+}
+
+.theme-blog-modal-hero-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.theme-blog-modal-hero-gradient {
+  background: linear-gradient(
+    to top,
+    #080d10 0%,
+    rgba(8, 13, 16, 0.45) 45%,
+    transparent 100%
+  );
+}
+
+
+/* ---------------------------------------------------------
+   BLOG MODAL TECHNOLOGY BADGE
+   --------------------------------------------------------- */
+
+.theme-blog-modal .theme-tech-category-badge {
+  color: #f8fafc !important;
+}
+
+
+/* ---------------------------------------------------------
+   STATS
+   --------------------------------------------------------- */
+
+.theme-stats-card {
+  background-color: #050809;
+  border-color: #1e272e;
+}
+
+.theme-stats-title {
+  color: #86efac;
+}
+
+.theme-stats-value {
+  color: #ffffff;
+}
+
+.theme-stats-muted {
+  color: #9ca3af;
+}
+
+
+/* ---------------------------------------------------------
+   CASE STUDIES
+   --------------------------------------------------------- */
+
+.theme-case-feature-card {
+  background-color: #050809;
+  border-color: #1e272e;
+}
+
+.theme-case-feature-title {
+  color: #ffffff;
+}
+
+.theme-case-feature-text {
+  color: #9ca3af;
+}
+
+.theme-case-notice {
+  background-color: #050809;
+  border-color: #1e272e;
+}
+
+.theme-case-notice:hover {
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+
+/* ---------------------------------------------------------
+   PROJECT TECHNOLOGY BADGES
+   --------------------------------------------------------- */
+
+.theme-project-tech-badge {
+  background-color: #141b20;
+  color: #c5cdd3;
+  border-color: #2d3841;
+}
+/* =================================================*/
+
+
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+   SHARED
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* Prevent accidental horizontal overflow */
+  .public-site {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .public-site section {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Keep containers inside viewport */
+  .public-site .max-w-7xl {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* Prevent long content from breaking layout */
+  .public-site h1,
+  .public-site h2,
+  .public-site h3,
+  .public-site h4,
+  .public-site p,
+  .public-site a,
+  .public-site span {
+    overflow-wrap: anywhere;
+  }
+
+  /* Keep images inside containers */
+  .public-site img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Wide content */
+  .public-site pre,
+  .public-site table {
+    max-width: 100%;
+  }
+
+  /* Buttons */
+  .public-site button {
+    max-width: 100%;
+  }
+
+  /* Mobile modals */
+  .theme-blog-modal,
+  .theme-project-modal {
+    width: calc(100vw - 1rem) !important;
+    max-width: calc(100vw - 1rem) !important;
+    max-height: calc(100vh - 1rem) !important;
+    margin: 0.5rem;
+  }
+
+  .theme-blog-modal-article,
+  .theme-project-modal {
+    overflow-wrap: anywhere;
+  }
+
+  .theme-blog-modal-article pre,
+  .theme-project-modal pre {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .theme-blog-modal-article img,
+  .theme-project-modal img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+

@@ -127,56 +127,56 @@ export default function EnhancedCaseStudies() {
 
           {/* Feature Cards */}
           <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-5 hover:border-green-500/50 transition">
+            <div className="theme-case-feature-card rounded-xl border p-5 hover:border-green-500/50 transition">
               <GitBranch className="text-green-400 mb-3" size={28} />
-              <h3 className="text-white font-semibold">
+              <h3 className="theme-case-feature-title font-semibold">
                 Architectures
               </h3>
-              <p className="text-neutral-500 text-sm mt-1">
+              <p className="theme-case-feature-text text-sm mt-1">
                 Real infrastructure diagrams
               </p>
             </div>
 
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-5 hover:border-green-500/50 transition">
+            <div className="theme-case-feature-card rounded-xl border p-5 hover:border-green-500/50 transition">
               <Code2 className="text-green-400 mb-3" size={28} />
-              <h3 className="text-white font-semibold">
+              <h3 className="theme-case-feature-title font-semibold">
                 Walkthroughs
               </h3>
-              <p className="text-neutral-500 text-sm mt-1">
+              <p className="theme-case-feature-text text-sm mt-1">
                 Step-by-step implementation
               </p>
             </div>
 
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-5 hover:border-green-500/50 transition">
+            <div className="theme-case-feature-card rounded-xl border p-5 hover:border-green-500/50 transition">
               <BarChart3 className="text-green-400 mb-3" size={28} />
-              <h3 className="text-white font-semibold">
+              <h3 className="theme-case-feature-title font-semibold">
                 Metrics
               </h3>
-              <p className="text-neutral-500 text-sm mt-1">
+              <p className="theme-case-feature-text text-sm mt-1">
                 Performance & impact analysis
               </p>
             </div>
 
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-5 hover:border-green-500/50 transition">
+            <div className="theme-case-feature-card rounded-xl border p-5 hover:border-green-500/50 transition">
               <Lightbulb className="text-green-400 mb-3" size={28} />
-              <h3 className="text-white font-semibold">
+              <h3 className="theme-case-feature-title font-semibold">
                 Learnings
               </h3>
-              <p className="text-neutral-500 text-sm mt-1">
+              <p className="theme-case-feature-text text-sm mt-1">
                 Challenges & best practices
               </p>
             </div>
           </div>
 
           {/* Bottom Notice */}
-          <div className="rounded-xl border border-green-500/20 bg-green-500/5 p-5 flex items-start gap-4">
+          <div className="theme-case-notice rounded-xl border p-5 flex items-start gap-4">
             <Clock3
               className="text-green-400 mt-1 flex-shrink-0"
               size={24}
             />
 
             <div>
-              <h3 className="text-white font-semibold">
+              <h3 className="theme-case-feature-title font-semibold">
                 Currently Building
               </h3>
 

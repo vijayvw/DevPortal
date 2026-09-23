@@ -9,6 +9,7 @@ const skillFields = {
   yearsExperience: z.number().int().min(0).max(50).nullable().optional(),
   priority: z.number().int().default(0),
   visible: z.boolean().default(true),
+  featured: z.boolean().default(false),
 };
 
 export const createSkillSchema = z.object({

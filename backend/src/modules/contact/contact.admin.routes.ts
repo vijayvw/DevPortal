@@ -6,6 +6,7 @@ import { validate } from '../../common/middleware/validate.middleware';
 import {
   contactMessageIdSchema,
   contactMessageListSchema,
+  replyContactMessageSchema,
   updateContactMessageSchema,
 } from './contact-message.schema';
 
@@ -32,4 +33,16 @@ contactAdminRouter.patch(
   '/:id',
   validate(updateContactMessageSchema),
   contactMessageController.update.bind(contactMessageController),
+);
+
+contactAdminRouter.delete(
+  '/:id',
+  validate(contactMessageIdSchema),
+  contactMessageController.delete.bind(contactMessageController),
+);
+
+contactAdminRouter.post(
+  '/:id/reply',
+  validate(replyContactMessageSchema),
+  contactMessageController.reply.bind(contactMessageController),
 );

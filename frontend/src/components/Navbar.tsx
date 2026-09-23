@@ -1,11 +1,21 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, ChevronRight, BookOpen, FileText } from 'lucide-react';
+import {
+  Menu,
+  X,
+  ChevronRight,
+  BookOpen,
+  FileText,
+  Sun,
+  Moon,
+} from 'lucide-react';
+import { useTheme } from "../context/ThemeContext";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const navItems = [
     { path: '/', label: 'Home' },
@@ -21,7 +31,13 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-bg-page/80 backdrop-blur-md border-b border-neutral-700">
+      <nav
+  className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors duration-300"
+  style={{
+    backgroundColor: "color-mix(in srgb, var(--theme-page) 80%, transparent)",
+    borderColor: "var(--theme-border)",
+  }}
+>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -75,6 +91,22 @@ export const Navbar = () => {
                 );
               })}
             </div>
+
+            {/*
+  Theme toggle temporarily hidden
+  <button
+    type="button"
+    onClick={toggleTheme}
+    className="p-2 rounded-md transition-colors duration-200 hover:text-primary-500 hover:bg-bg-surface focus:outline-none focus:ring-2 focus:ring-primary-500"
+    style={{
+      color: "var(--theme-text)",
+    }}
+    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+    title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+  >
+    {theme === "dark" ? <Sun size={19} /> : <Moon size={19} />}
+  </button>
+*/}
 
             {/* Mobile menu button */}
             <div className="md:hidden">

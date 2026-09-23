@@ -103,8 +103,7 @@ console.log(data?.longDescription);
             h-[95vh]
             rounded-2xl
             border
-            border-neutral-700
-            bg-bg-surface
+            theme-project-modal
             shadow-2xl
             overflow-hidden
             flex
@@ -114,7 +113,7 @@ console.log(data?.longDescription);
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 z-20 rounded-lg p-2 text-neutral-400 transition hover:bg-neutral-800 hover:text-white"
+              className="absolute right-4 top-4 z-20 rounded-lg p-2 theme-project-modal-muted transition hover:bg-neutral-800 hover:text-white"
             >
               <X size={22} />
             </button>
@@ -177,11 +176,11 @@ console.log(data?.longDescription);
 
                       </div>
 
-                      <h2 className="font-mono text-4xl font-bold text-white">
+                      <h2 className="theme-project-modal-hero-title font-mono text-4xl font-bold">
                         {data.title}
                       </h2>
 
-                      <div className="mt-3 flex flex-wrap items-center gap-6 text-sm text-neutral-300">
+                      <div className="mt-3 flex flex-wrap items-center gap-6 text-sm theme-project-modal-hero-muted">
 
                       <div className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
@@ -258,15 +257,15 @@ console.log(data?.longDescription);
                     </div>
 
                   </div>
-                    <div className="flex-1 overflow-y-auto px-8 py-8 space-y-8">
+                    <div className="theme-project-modal-content flex-1 overflow-y-auto px-8 py-8 space-y-8">
 
-                      <p className="mt-3 text-lg leading-relaxed text-neutral-300">
+                      <p className="theme-project-modal-text mt-3 text-lg leading-relaxed">
                         {data.shortDescription}
                       </p>
 
                     {/* Technologies */}
                     <div>
-                      <h3 className="mb-4 font-mono text-xl font-semibold text-white">
+                      <h3 className="theme-project-modal-heading mb-4 font-mono text-xl font-semibold">
                         Technologies
                       </h3>
 
@@ -274,7 +273,7 @@ console.log(data?.longDescription);
                         {data.technologies.map((tech) => (
                           <span
                             key={tech}
-                            className="rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-300 transition hover:border-primary-500 hover:text-primary-400"
+                            className="theme-project-modal-code rounded-md border px-3 py-2 text-sm transition hover:border-primary-500 hover:text-primary-400"
                           >
                             {tech}
                           </span>
@@ -325,7 +324,7 @@ console.log(data?.longDescription);
                           href={data.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 rounded-lg bg-neutral-800 px-6 py-3 font-medium text-white transition hover:bg-neutral-700"
+                          className="theme-project-modal-button inline-flex items-center gap-2 rounded-lg px-6 py-3 font-medium transition hover:bg-neutral-700"
                         >
                           <Github size={18} />
                           <span>GitHub</span>
@@ -350,7 +349,7 @@ console.log(data?.longDescription);
                           href={data.videoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-6 py-3 font-medium text-neutral-300 transition hover:border-primary-500 hover:text-primary-400"
+                          className="theme-project-modal-button-outline inline-flex items-center gap-2 rounded-lg border px-6 py-3 font-medium transition hover:border-primary-500 hover:text-primary-400"
                         >
                           <PlayCircle size={18} />
                           <span>Watch Demo</span>
@@ -368,7 +367,7 @@ console.log(data?.longDescription);
                           <img
                             src={data.architectureDiagramUrl}
                             alt="Architecture Diagram"
-                            className="max-h-[700px] w-full rounded-xl object-contain bg-neutral-900"
+                            className="theme-project-modal-code max-h-[700px] w-full rounded-xl object-contain"
                           />
                         </div>
                       </div>

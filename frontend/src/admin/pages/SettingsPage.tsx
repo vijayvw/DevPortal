@@ -9,7 +9,7 @@ export default function SettingsPage() {
     <AdminLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Settings</h1>
+          <h1 className="text-3xl text-white font-bold">Settings</h1>
           <p className="mt-2 text-zinc-400">
             Manage your account and portfolio settings.
           </p>

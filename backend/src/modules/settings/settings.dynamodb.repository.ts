@@ -31,6 +31,7 @@ export interface SiteSettings {
   linkedin?: string;
   twitter?: string;
   resumeUrl?: string;
+  copyrightName?: string;
   createdAt?: string;
   updatedAt?: string;
 }

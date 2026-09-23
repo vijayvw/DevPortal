@@ -217,7 +217,7 @@ const EnhancedBlog: React.FC = () => {
         {isLoading && (
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {[0, 1].map((i) => (
-              <div key={i} className="bg-gray-900/50 border border-gray-700 rounded-lg p-6">
+              <div key={i} className="bg-bg-surface border border-neutral-700 rounded-xl p-6 shadow-card">
                 <LoadingSkeleton lines={4} />
               </div>
             ))}
@@ -251,7 +251,7 @@ const EnhancedBlog: React.FC = () => {
                     key={post.id}
                     whileHover={{ scale: 1.02 }}
                     onClick={() => handlePostClick(post)}
-                    className="bg-gray-900/50 border border-gray-700 rounded-lg overflow-hidden cursor-pointer group"
+                    className="bg-bg-surface border border-neutral-700 rounded-xl overflow-hidden group hover:border-primary-500/50 transition-all duration-300 shadow-card hover:shadow-card-hover cursor-pointer"
                   >
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-3">
@@ -259,15 +259,15 @@ const EnhancedBlog: React.FC = () => {
                         <span className="text-xs text-yellow-400 font-medium">⭐ Featured</span>
                       </div>
 
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">
+                      <h3 className="theme-blog-title text-xl font-bold mb-3 group-hover:text-green-400 transition-colors">
                         {post.title}
                       </h3>
 
-                      <p className="text-gray-400 mb-4 line-clamp-2">
+                      <p className="theme-blog-muted mb-4 line-clamp-2">
                         {post.excerpt}
                       </p>
 
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <EngagementMetrics
                           views={formatCount(post.views)}
                           likes={String(post.likes)}
@@ -276,7 +276,6 @@ const EnhancedBlog: React.FC = () => {
                         />
 
                         <div className="flex items-center gap-4 text-xs text-gray-500">
-                          <span>{post.readTime}</span>
                           <span>{post.date ? new Date(post.date).toLocaleDateString() : ''}</span>
                         </div>
                       </div>
@@ -302,13 +301,13 @@ const EnhancedBlog: React.FC = () => {
               className="flex flex-col md:flex-row gap-4 mb-8"
             >
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="theme-blog-muted absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Search articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-400"
+                  className="theme-blog-input w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-green-400"
                 />
               </div>
 
@@ -323,7 +322,7 @@ const EnhancedBlog: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'date' | 'views' | 'likes')}
-                className="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-green-400"
+                className="theme-blog-sort px-4 py-2 border rounded-lg focus:outline-none focus:border-green-400"
               >
                 <option value="date">Latest</option>
                 <option value="views">Most Viewed</option>
@@ -339,7 +338,7 @@ const EnhancedBlog: React.FC = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md"
+                    className="fixed inset-0 z-[9999] bg-black backdrop-blur-md"
                     onClick={() => setSelectedSlug(null)}
                   >
                     <div className="flex h-full items-center justify-center p-6">
@@ -348,7 +347,7 @@ const EnhancedBlog: React.FC = () => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="relative w-full max-w-5xl h-[95vh] rounded-2xl overflow-hidden flex flex-col bg-bg-surface border border-neutral-700"
+                        className="theme-blog-modal relative w-full max-w-5xl h-[95vh] rounded-2xl overflow-hidden flex flex-col border"
                       >
                         {detailQuery.isLoading && (
                           <div className="p-6">
@@ -405,7 +404,7 @@ const EnhancedBlog: React.FC = () => {
         key={post.id}
         whileHover={{ scale: 1.02 }}
         onClick={() => handlePostClick(post)}
-        className="bg-gray-900/50 border border-gray-700 rounded-lg overflow-hidden cursor-pointer group"
+        className="bg-bg-surface border border-neutral-700 rounded-xl overflow-hidden group hover:border-primary-500/50 transition-all duration-300 shadow-card hover:shadow-card-hover cursor-pointer"
       >
         <div className="p-6">
           <div className="flex items-center gap-2 mb-3">
@@ -422,23 +421,21 @@ const EnhancedBlog: React.FC = () => {
             )}
           </div>
 
-          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-green-400">
+          <h3 className="theme-blog-title text-xl font-bold mb-3 group-hover:text-green-400">
             {post.title}
           </h3>
 
-          <p className="text-gray-400 mb-4 line-clamp-3">
+          <p className="theme-blog-muted mb-4 line-clamp-3">
             {post.excerpt}
           </p>
 
-          <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-gray-500">
             <EngagementMetrics
               views={formatCount(post.views)}
               likes={String(post.likes)}
               comments={String(post.comments)}
               featured={post.featured}
             />
-
-            <span>{post.readTime}</span>
           </div>
 
           <div className="flex flex-wrap gap-2 mt-4">
@@ -490,7 +487,7 @@ function BlogPostModalContent({
   return (
   <div className="flex h-full flex-col">
 
-    <div className="relative h-80 shrink-0 overflow-hidden">
+    <div className="theme-blog-modal-hero relative h-80 shrink-0 overflow-hidden">
         {heroImageSrc ? (
           <img
             src={heroImageSrc}
@@ -498,14 +495,14 @@ function BlogPostModalContent({
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
-          <div className="absolute inset-0 bg-neutral-900" />
+          <div className="theme-blog-modal-hero-fallback absolute inset-0" />
         )}
 
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="theme-blog-modal-hero-overlay absolute inset-0" />
 
         {/* Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-surface via-bg-surface/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
         {/* Close button */}
         <button
@@ -543,11 +540,11 @@ function BlogPostModalContent({
             )}
           </div>
 
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold theme-blog-modal-heading mb-4">
             {post.title}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-200">
+          <div className="flex flex-wrap items-center gap-6 text-sm theme-blog-modal-muted">
 
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
@@ -624,7 +621,7 @@ function BlogPostModalContent({
       </div>
       {/* Article */}
       <div className="flex-1 overflow-y-auto px-8 py-8 space-y-8">
-        <p className="text-lg leading-relaxed text-neutral-300">
+        <p className="theme-blog-modal-text text-lg leading-relaxed">
 
   {post.excerpt}
 
@@ -640,7 +637,7 @@ function BlogPostModalContent({
 
       key={tag}
 
-      className="rounded-full bg-gray-800 px-3 py-1 text-sm text-green-400 border border-green-500/20"
+      className="theme-blog-modal-tag rounded-full px-3 py-1 text-sm border"
 
     >
 
@@ -652,20 +649,21 @@ function BlogPostModalContent({
 
 </div>
 
-        <article
+    <article
   className="
+    theme-blog-modal-article
     prose
-    prose-invert
     prose-lg
     max-w-none
 
-    prose-headings:text-white
-    prose-p:text-neutral-300
-    prose-strong:text-white
-    prose-li:text-neutral-300
     prose-code:text-primary-400
 
     prose-img:mx-auto
+    prose-img:block
+    prose-img:rounded-xl
+    prose-img:shadow-2xl
+    prose-img:max-w-full
+  
     prose-img:block
     prose-img:rounded-xl
     prose-img:shadow-2xl

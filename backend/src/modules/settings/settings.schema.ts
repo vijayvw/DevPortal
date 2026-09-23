@@ -45,14 +45,15 @@ export const updateSettingsSchema = z.object({
 
     phone: z.string().max(50).optional(),
 
-    address: z.string().max(300).optional(),
+    github: z.string().url().or(z.literal("")).optional(),
 
-    github: z.string().url().optional(),
+    linkedin: z.string().url().or(z.literal("")).optional(),
 
-    linkedin: z.string().url().optional(),
+    twitter: z.string().url().or(z.literal("")).optional(),
 
-    twitter: z.string().url().optional(),
+    resumeUrl: z.string().url().or(z.literal("")).optional(),
 
-    resumeUrl: z.string().url().optional(),
+    
+    copyrightName: z.string().max(200).optional(),
   }),
 });

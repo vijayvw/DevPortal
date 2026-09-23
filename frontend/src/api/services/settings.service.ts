@@ -15,6 +15,7 @@ export interface PublicSettings {
   linkedin: string | null;
   twitter: string | null;
   resumeUrl: string | null;
+  copyrightName: string | null;
 
   // About page
   aboutGreeting: string | null;

@@ -95,9 +95,9 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
   const Component = animated ? motion.span : 'span';
   const props = animated ? {
     whileHover: { scale: 1.05 },
-    className: `${sizeClasses[size]} rounded-full font-medium border ${categoryColors[category]} inline-flex items-center gap-1.5`
+    className: `${sizeClasses[size]} theme-tech-category-badge rounded-full font-medium border ${categoryColors[category]} inline-flex items-center gap-1.5`
   } : {
-    className: `${sizeClasses[size]} rounded-full font-medium border ${categoryColors[category]} inline-flex items-center gap-1.5`
+    className: `${sizeClasses[size]} theme-tech-category-badge rounded-full font-medium border ${categoryColors[category]} inline-flex items-center gap-1.5`
   };
 
   return (
@@ -149,7 +149,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-6">
+      <div className="theme-stats-card border rounded-lg p-6">
         <LoadingSkeleton lines={3} />
       </div>
     );
@@ -160,7 +160,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02, borderColor: '#22c55e' }}
-      className="bg-gray-900/50 border border-gray-700 rounded-lg p-6 transition-all duration-300"
+      className="theme-stats-card border rounded-lg p-6 transition-all duration-300"
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-green-300 text-sm font-medium">{title}</h3>
@@ -343,7 +343,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
           selectedCategory === 'All'
             ? 'bg-green-400 text-black'
-            : 'bg-gray-800 text-green-400 border border-gray-600 hover:border-green-400'
+            : 'theme-blog-filter'
         }`}
       >
         All
@@ -358,7 +358,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
             selectedCategory === category
               ? 'bg-green-400 text-black'
-              : 'bg-gray-800 text-green-400 border border-gray-600 hover:border-green-400'
+              : 'theme-blog-filter'
           }`}
         >
           {category}
@@ -376,7 +376,7 @@ interface ViewToggleProps {
 
 export const ViewToggle: React.FC<ViewToggleProps> = ({ view, onViewChange }) => {
   return (
-    <div className="flex bg-gray-800 rounded-lg p-1">
+    <div className="theme-blog-view-toggle flex rounded-lg p-1">
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -384,7 +384,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ view, onViewChange }) =>
         className={`p-2 rounded-md transition-all duration-300 ${
           view === 'grid'
             ? 'bg-green-400 text-black'
-            : 'text-gray-400 hover:text-green-400'
+            : 'theme-blog-view-button'
         }`}
       >
         <Grid3X3 className="w-4 h-4" />
@@ -395,8 +395,8 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ view, onViewChange }) =>
         onClick={() => onViewChange('list')}
         className={`p-2 rounded-md transition-all duration-300 ${
           view === 'list'
-            ? 'bg-green-400 text-black'
-            : 'text-gray-400 hover:text-green-400'
+  ? 'bg-green-400 text-black'
+  : 'theme-blog-view-button'
         }`}
       >
         <List className="w-4 h-4" />

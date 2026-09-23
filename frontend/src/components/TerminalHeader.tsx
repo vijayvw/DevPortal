@@ -8,7 +8,7 @@ interface TerminalHeaderProps {
 
 export const TerminalHeader = ({ command, description }: TerminalHeaderProps) => {
   return (
-    <div className="bg-[#020604] border-b border-[#0B3D20] relative overflow-hidden">
+    <div className="theme-terminal-header border-b relative overflow-hidden">
       {/* Scanline effect */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="h-full bg-gradient-to-b from-transparent via-primary-500/20 to-transparent scanline" />
@@ -40,7 +40,7 @@ export const TerminalHeader = ({ command, description }: TerminalHeaderProps) =>
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-neutral-400 text-sm max-w-2xl"
+              className="theme-terminal-description text-sm max-w-2xl"
             >
               {description}
             </motion.p>

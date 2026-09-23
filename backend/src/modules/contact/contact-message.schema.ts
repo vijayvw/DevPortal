@@ -32,3 +32,12 @@ export const updateContactMessageSchema = z.object({
     repliedAt: z.string().nullable().optional(),
   }),
 });
+
+export const replyContactMessageSchema = z.object({
+  params: z.object({
+    id: z.string().min(1),
+  }),
+  body: z.object({
+    message: z.string().min(1).max(10000),
+  }),
+});

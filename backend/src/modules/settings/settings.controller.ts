@@ -44,6 +44,7 @@ export class SettingsController {
         linkedin: settings.linkedin ?? null,
         twitter: settings.twitter ?? null,
         resumeUrl: settings.resumeUrl ?? null,
+        copyrightName: settings.copyrightName ?? null,
       });
     } catch (error) {
       next(error);

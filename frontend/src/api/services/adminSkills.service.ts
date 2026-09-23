@@ -17,6 +17,7 @@ export interface CreateSkillRequest {
   yearsExperience?: number | null;
   priority: number;
   visible: boolean;
+  featured: boolean;
 }
 
 export async function createSkill(

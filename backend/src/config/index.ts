@@ -91,6 +91,7 @@ export const config = {
     secretAccessKey:
       env.AWS_SECRET_ACCESS_KEY,
     s3Bucket: env.AWS_S3_BUCKET,
+    mediaBaseUrl: env.MEDIA_BASE_URL,
   },
 
   upload: {

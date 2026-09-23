@@ -13,7 +13,18 @@ function getBucket(): string {
   if (!config.aws.s3Bucket) {
     throw new Error('AWS_S3_BUCKET is not configured');
   }
+
   return config.aws.s3Bucket;
+}
+
+function getMediaBaseUrl(): string {
+  const baseUrl = config.aws.mediaBaseUrl;
+
+  if (!baseUrl) {
+    throw new Error('MEDIA_BASE_URL is not configured');
+  }
+
+  return baseUrl.replace(/\/+$/, '');
 }
 
 export async function uploadToS3(
@@ -32,10 +43,12 @@ export async function uploadToS3(
     }),
   );
 
-  return `https://${bucket}.s3.${config.aws.region}.amazonaws.com/${key}`;
+  return `${getMediaBaseUrl()}/${key}`;
 }
 
-export async function deleteFromS3(key: string): Promise<void> {
+export async function deleteFromS3(
+  key: string,
+): Promise<void> {
   await s3.send(
     new DeleteObjectCommand({
       Bucket: getBucket(),

@@ -24,6 +24,7 @@ export default function CreateSkillModal({
     yearsExperience: 0,
     iconUrl: "",
     visible: true,
+    featured: false,
   });
 
   if (!open) return null;
@@ -60,6 +61,7 @@ export default function CreateSkillModal({
       yearsExperience: 0,
       iconUrl: "",
       visible: true,
+      featured: false,
     });
   }
 
@@ -162,6 +164,18 @@ export default function CreateSkillModal({
             />
             Visible
           </label>
+
+          <label className="flex items-center gap-3 text-white">
+            <input
+              type="checkbox"
+              checked={form.featured}
+              onChange={(e) =>
+                update("featured", e.target.checked)
+              }
+            />
+            Featured on Home
+          </label>
+
         </div>
 
         <div className="mt-8 flex justify-end gap-4">

@@ -63,3 +63,23 @@ export async function markContactReplied(id: string) {
 
   return response.data.data;
 }
+
+export async function deleteAdminContact(id: string) {
+  const response = await apiClient.delete(
+    `/admin/contact/${id}`
+  );
+
+  return response.data.data;
+}
+
+export async function replyToAdminContact(
+  id: string,
+  message: string
+) {
+  const response = await apiClient.post(
+    `/admin/contact/${id}/reply`,
+    { message }
+  );
+
+  return response.data.data;
+}

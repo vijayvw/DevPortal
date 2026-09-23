@@ -73,7 +73,7 @@ export default function ProfileCard() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold">Profile</h2>
+          <h2 className="text-xl font-semibold text-white">Profile</h2>
 
           <p className="text-sm text-zinc-400">
             Manage your account information.

@@ -27,6 +27,7 @@ export default function EditSkillModal({
     yearsExperience: 0,
     iconUrl: "",
     visible: true,
+    featured: false,
   });
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function EditSkillModal({
       yearsExperience: data.yearsExperience ?? 0,
       iconUrl: data.iconUrl ?? "",
       visible: true,
+      featured: data.featured ?? false,
     });
   }, [data]);
 
@@ -191,6 +193,17 @@ export default function EditSkillModal({
                 }
               />
               Visible
+            </label>
+
+            <label className="flex items-center gap-3 text-white">
+              <input
+                type="checkbox"
+                checked={form.featured}
+                onChange={(e) =>
+                  updateField("featured", e.target.checked)
+                }
+              />
+              Featured on Home
             </label>
           </div>
         )}

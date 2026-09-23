@@ -30,14 +30,14 @@ export default function ContactTable({
 
   return (
     <div className="overflow-hidden rounded-xl border border-zinc-800">
-      <table className="w-full">
-        <thead className="bg-zinc-900">
+      <table className="w-full text-zinc-200">
+        <thead className="bg-zinc-900 text-zinc-200">
           <tr>
-            <th className="p-4 text-left">Name</th>
-            <th className="p-4 text-left">Email</th>
-            <th className="p-4 text-left">Subject</th>
-            <th className="p-4 text-left">Status</th>
-            <th className="p-4 text-left">Date</th>
+            <th className="p-4 text-left text-zinc-200">Name</th>
+            <th className="p-4 text-left text-zinc-200">Email</th>
+            <th className="p-4 text-left text-zinc-200">Subject</th>
+            <th className="p-4 text-left text-zinc-200">Status</th>
+            <th className="p-4 text-left text-zinc-200">Date</th>
           </tr>
         </thead>
 
@@ -55,17 +55,17 @@ export default function ContactTable({
               }}
               className="cursor-pointer border-t border-zinc-800 hover:bg-zinc-900"
             >
-              <td className="p-4">{contact.name}</td>
+              <td className="p-4 text-zinc-200">{contact.name}</td>
 
-              <td className="p-4">{contact.email}</td>
+              <td className="p-4 text-zinc-200">{contact.email}</td>
 
-              <td className="p-4">{contact.subject}</td>
+              <td className="p-4 text-zinc-200">{contact.subject}</td>
 
-              <td className="p-4">
+              <td className="p-4 text-zinc-200">
                 <ContactStatusBadge status={contact.status} />
               </td>
 
-              <td className="p-4">
+              <td className="p-4 text-zinc-200">
                 {new Date(contact.createdAt).toLocaleString()}
               </td>
             </tr>

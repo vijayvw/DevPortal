@@ -1,4 +1,4 @@
-import { GetCommand, PutCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
+import { GetCommand, PutCommand, ScanCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import { randomUUID } from 'node:crypto';
 import { dynamoDb } from '../../infrastructure/dynamodb/client';
 import { config } from '../../config';
@@ -26,6 +26,26 @@ export class ContactMessageDynamoDBRepository {
     }));
 
     return (result.Item as ContactMessage | undefined) ?? null;
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const current = await this.findById(id);
+
+    if (!current) {
+      return false;
+    }
+
+    await dynamoDb.send(
+      new DeleteCommand({
+        TableName: config.aws.tableName,
+        Key: {
+          PK: `${PREFIX}${id}`,
+          SK: 'METADATA',
+        },
+      }),
+    );
+
+    return true;
   }
 
   async findAll(options: {

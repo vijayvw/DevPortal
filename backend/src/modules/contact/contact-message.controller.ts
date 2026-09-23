@@ -15,6 +15,33 @@ export class ContactMessageController {
     }
   }
 
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      return ApiResponse.success(
+        res,
+        await contactMessageService.delete(req.params.id),
+        'Contact message deleted successfully',
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async reply(req: Request, res: Response, next: NextFunction) {
+    try {
+      return ApiResponse.success(
+        res,
+        await contactMessageService.reply(
+          req.params.id,
+          req.body.message,
+        ),
+        'Reply sent successfully',
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async list(req: Request, res: Response, next: NextFunction) {
     try {
       return ApiResponse.success(

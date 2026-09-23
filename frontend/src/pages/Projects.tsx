@@ -104,11 +104,9 @@ export const Projects = () => {
     }
   });
     
-  const totalTechnologies = new Set(projects.flatMap((p) => p.technologies)).size;
-  const devopsCount = projects.filter((p) => p.category.toLowerCase() === 'devops').length;
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-bg-page">
       {/* Terminal Header */}
       <TerminalHeader
         command="docker ps -a"
@@ -116,7 +114,7 @@ export const Projects = () => {
       />
 
       {/* Filter Tabs */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-bg-page">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {isLoading && <LoadingState label="Fetching projects..." />}
           {isError && (
@@ -138,12 +136,13 @@ export const Projects = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search projects..."
-                    className="w-full rounded-xl border border-neutral-700 bg-bg-surface py-3 pl-11 pr-4 text-neutral-200 placeholder:text-neutral-500 focus:border-primary-500 focus:outline-none"
+                    className="theme-input w-full rounded-xl border py-3 pl-11 pr-4 text-neutral-200 placeholder:text-neutral-500 focus:border-primary-500 focus:outline-none"
                   />
                 </div>
-                <label className="flex items-center gap-2 font-mono text-neutral-300">
+                <label className="theme-filter-label flex items-center gap-2 font-mono">
                   <input
                     type="checkbox"
+                    className="theme-filter-checkbox"
                     checked={featuredOnly}
                     onChange={(e) => setFeaturedOnly(e.target.checked)}
                   />
@@ -154,7 +153,7 @@ export const Projects = () => {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="rounded-lg border border-neutral-700 bg-bg-surface px-4 py-2 text-neutral-200"
+                    className="theme-input rounded-lg border px-4 py-2 text-neutral-200"
                   >
                     <option value="newest">Newest</option>
                     <option value="oldest">Oldest</option>
@@ -174,24 +173,20 @@ export const Projects = () => {
                   <button
                     key={filter.id}
                     onClick={() => setActiveFilter(filter.id)}
-                    className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-mono font-medium transition-all duration-200 ${
+                    className={`theme-filter-button flex items-center space-x-2 px-6 py-3 rounded-lg font-mono font-medium transition-all duration-200 ${
                       activeFilter === filter.id
                         ? "bg-primary-500 text-bg-surface shadow-glow"
-                        : "bg-bg-elevated text-neutral-200 border border-neutral-700 hover:border-primary-500/50 hover:text-primary-500"
+                        : ""
                     }`}
                   >
                     <Filter size={16} />
                     <span>{filter.label}</span>
 
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        activeFilter === filter.id
-                          ? "bg-bg-surface text-primary-500"
-                          : "bg-neutral-700 text-neutral-400"
-                      }`}
-                    >
-                      {filter.count}
-                    </span>
+                    {activeFilter === filter.id && (
+  <span className="bg-bg-surface text-primary-500 text-xs px-2 py-1 rounded-full">
+    {filter.count}
+  </span>
+)}
                   </button>
                 ))}
               </motion.div>
@@ -217,11 +212,11 @@ export const Projects = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.6 }}
                   onClick={() => setSelectedProject(project)}
-                  className="bg-bg-surface border border-neutral-700 rounded-xl overflow-hidden group hover:border-primary-500/50 transition-all duration-300 shadow-card hover:shadow-card-hover cursor-pointer"
+                  className="theme-panel border rounded-xl overflow-hidden group hover:border-primary-500/50 transition-all duration-300 shadow-card hover:shadow-card-hover cursor-pointer"
                 >
                   {/* Project Image */}
                   <div className="relative">
-                    <div className="aspect-video overflow-hidden rounded-t-xl bg-neutral-900">
+                    <div className="theme-image-placeholder aspect-video overflow-hidden rounded-t-xl">
                       {project.coverImageUrl ? (
                         <img
                           src={project.coverImageUrl}
@@ -266,13 +261,13 @@ export const Projects = () => {
                       {project.technologies.slice(0, 4).map((tech) => (
                         <span
                           key={tech}
-                          className="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded border border-neutral-700 hover:border-primary-500/30 transition-colors"
+                          className="theme-project-tech-badge px-2 py-1 text-xs rounded border hover:border-primary-500/30 transition-colors"
                         >
                           {tech}
                         </span>
                       ))}
                       {project.technologies.length > 4 && (
-                        <span className="px-2 py-1 bg-neutral-800 text-neutral-400 text-xs rounded border border-neutral-700">
+                        <span className="theme-project-tech-badge px-2 py-1 text-xs rounded border hover:border-primary-500/30 transition-colors">
                           +{project.technologies.length - 4} more
                         </span>
                       )}
@@ -335,49 +330,7 @@ export const Projects = () => {
           setSelectedProject(null);
         }}
       />
-      {!isLoading && !isError && (
-        <section className="py-24 bg-bg-elevated">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="bg-bg-surface border border-neutral-700 rounded-xl p-8 font-mono"
-            >
-              <div className="space-y-4">
-                <div className="text-accent-500">
-                  $ cat project_summary.txt
-                </div>
-
-                <div className="space-y-2 text-neutral-200">
-                  <div className="flex justify-between">
-                    <span>Total Projects:</span>
-                    <span className="text-primary-500">{projects.length}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>DevOps Projects:</span>
-                    <span className="text-primary-500">{devopsCount}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Technologies Used:</span>
-                    <span className="text-primary-500">
-                      {totalTechnologies}+
-                    </span>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-neutral-700 text-sm text-neutral-400">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-accent-500">$</span>
-                    <span>echo "Each project demonstrates real-world implementation of cloud-native architecture and modern development practices"</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-      )}
+          
 
       {/* CTA Section */}
       <section className="py-24">
@@ -387,12 +340,12 @@ export const Projects = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-bg-elevated to-bg-surface border border-primary-500/20 p-12 rounded-2xl shadow-glow"
+            className="theme-cta border p-12 rounded-2xl shadow-glow"
           >
             <h2 className="font-mono text-3xl md:text-4xl font-bold text-primary-500 mb-6">
               Interested in Collaboration?
             </h2>
-            <p className="text-xl text-neutral-200 mb-8 leading-relaxed">
+            <p className="theme-cta-text text-xl mb-8 leading-relaxed">
               These projects showcase my expertise in DevOps and Cloud Security.
               Let's discuss how we can work together on your next project.
             </p>
@@ -401,14 +354,14 @@ export const Projects = () => {
                 href={settings?.github ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-4 bg-primary-500 text-bg-surface font-semibold rounded-lg hover:bg-primary-700 transition-all duration-200 shadow-glow hover:shadow-card-hover"
+                className="inline-flex items-center justify-center px-5 sm:px-8 py-3 sm:py-4 bg-primary-500 text-bg-surface font-semibold rounded-lg hover:bg-primary-700 transition-all duration-200 shadow-glow hover:shadow-card-hover"
               >
                 <Github className="mr-2 h-5 w-5" />
                 View All Projects
               </a>
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-neutral-600 text-neutral-200 hover:border-primary-500 hover:text-primary-500 font-semibold rounded-lg transition-all duration-200"
+                className="theme-cta-button inline-flex items-center justify-center px-5 sm:px-8 py-3 sm:py-4 border-2 hover:border-primary-500 hover:text-primary-500 font-semibold rounded-lg transition-all duration-200"
               >
                 <ExternalLink className="mr-2 h-5 w-5" />
                 Start a Project

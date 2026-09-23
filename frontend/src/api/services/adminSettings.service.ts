@@ -32,6 +32,7 @@ export interface PortfolioSettings {
   linkedin: string | null;
   twitter: string | null;
   resumeUrl: string | null;
+  copyrightName: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -58,6 +59,7 @@ export interface UpdatePortfolioRequest {
   linkedin?: string;
   twitter?: string;
   resumeUrl?: string;
+  copyrightName?: string;
 }
 
 export async function getPortfolioSettings() {

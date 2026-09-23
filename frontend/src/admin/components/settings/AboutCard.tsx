@@ -276,7 +276,7 @@ export default function AboutCard() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold">About Settings</h2>
+          <h2 className="text-xl  text-white font-semibold">About Settings</h2>
           <p className="text-sm text-zinc-400">
             Manage your About page content, specializations, and career
             timeline.

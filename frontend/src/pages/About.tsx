@@ -74,7 +74,7 @@ export const About = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-bg-page">
       {/* Terminal Header */}
       <TerminalHeader
         command="cat about.txt"
@@ -93,13 +93,13 @@ export const About = () => {
               viewport={{ once: true }}
               className="lg:col-span-8 space-y-8"
             >
-              <div className="bg-bg-surface border border-neutral-700 rounded-xl p-8 shadow-card">
+              <div className="bg-bg-surface border border-neutral-700 rounded-xl p-8 shadow-card transition-all duration-300 hover:border-primary-500/50 hover:shadow-[0_0_12px_rgba(0,255,100,0.10)] hover:-translate-y-0.5">
                 <div className="font-mono text-lg mb-6">
                   <span className="text-accent-500">$</span>
                   <span className="text-primary-500"> cat</span>
                   <span className="text-neutral-400"> bio.txt</span>
                 </div>
-                <div className="space-y-4 text-neutral-200 leading-relaxed">
+                <div className="theme-about-text space-y-4 leading-relaxed">
                   <Typewriter
                     text={
                       settings?.aboutGreeting ??
@@ -141,7 +141,7 @@ export const About = () => {
               viewport={{ once: true }}
               className="lg:col-span-4 space-y-5"
             >
-              <div className="bg-black border border-neutral-800 rounded-xl p-5">
+              <div className="theme-about-panel border rounded-xl p-5 transition-all duration-300 hover:border-primary-500/50 hover:shadow-[0_0_12px_rgba(0,255,100,0.10)] hover:-translate-y-0.5">
                 <h3 className="font-mono text-primary-500 font-semibold mb-4 text-lg">
                   Quick Stats
                 </h3>
@@ -151,7 +151,7 @@ export const About = () => {
                       key={stat.label}
                       className="flex items-center justify-between"
                     >
-                      <span className="text-neutral-400">{stat.label}</span>
+                      <span className="theme-about-muted">{stat.label}</span>
                       <span className="text-primary-500 font-mono text-sm">
                         {stat.value}
                       </span>
@@ -160,7 +160,7 @@ export const About = () => {
                 </div>
               </div>
 
-              <div className="bg-black border border-neutral-800 rounded-xl p-5">
+              <div className="theme-about-panel border rounded-xl p-5 transition-all duration-300 hover:border-primary-500/50 hover:shadow-[0_0_12px_rgba(0,255,100,0.10)] hover:-translate-y-0.5">
                 <h3 className="font-mono text-primary-500 font-semibold mb-4 text-lg">
                   Specializations
                 </h3>
@@ -168,7 +168,7 @@ export const About = () => {
                   {specializations.map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1.5 bg-[#080D10] text-neutral-300 text-sm rounded-md border border-neutral-800 hover:border-primary-500/50 hover:text-primary-400 transition-all duration-300"
+                      className="theme-specialization px-3 py-1.5 text-sm rounded-md border hover:border-primary-500/50 hover:text-primary-400 transition-all duration-300"
                     >
                       {skill}
                     </span>
@@ -181,7 +181,7 @@ export const About = () => {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-24 bg-black">
+      <section className="py-24 theme-about-timeline">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -190,7 +190,7 @@ export const About = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-mono text-3xl md:text-4xl font-bold text-primary-500 mb-4">
+            <h2 className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold text-primary-500 mb-4">
               {settings?.timelineTitle ?? "Career Timeline"}
             </h2>
             <p className="text-neutral-400 max-w-2xl mx-auto">
@@ -227,15 +227,19 @@ export const About = () => {
 
                     {/* Content */}
                     <div className={`ml-16 md:ml-0 md:w-1/2 ${isEven ? 'md:pr-12' : 'md:pl-12'}`}>
-                      <div className="bg-bg-elevated border border-neutral-700 rounded-lg p-6 hover:border-primary-500/50 transition-colors shadow-card">
+                      <div className="theme-timeline-card border rounded-lg p-6 hover:border-primary-500/50 transition-colors shadow-card">
                         <div className="font-mono text-accent-500 text-sm mb-2">{item.year}</div>
-                        <h3 className="font-semibold text-xl text-neutral-200 mb-1">{item.title}</h3>
+                        <h3 className="font-semibold text-xl theme-timeline-title mb-1">
+                          {item.title}
+                        </h3>
                       {item.organization && (
                         <div className="text-primary-500 font-medium mb-3">
                           {item.organization}
                         </div>
                       )}
-                        <p className="text-neutral-400 text-sm leading-relaxed">{item.description}</p>
+                        <p className="theme-timeline-description text-sm leading-relaxed">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                   </motion.div>

@@ -17,7 +17,7 @@ export default function SystemInfoCard() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold">System Information</h2>
+          <h2 className="text-xl font-semibold text-white ">System Information</h2>
           <p className="text-sm text-zinc-400">
             Current backend and application status.
           </p>

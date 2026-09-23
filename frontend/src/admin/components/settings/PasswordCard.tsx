@@ -69,7 +69,7 @@ export default function PasswordCard() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-xl font-semibold text-white">
             Change Password
           </h2>
 

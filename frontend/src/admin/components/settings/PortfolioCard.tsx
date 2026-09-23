@@ -21,6 +21,7 @@ interface PortfolioForm {
   linkedin: string;
   twitter: string;
   resumeUrl: string;
+  copyrightName: string;
 }
 
 export default function PortfolioCard() {
@@ -43,6 +44,7 @@ export default function PortfolioCard() {
     linkedin: "",
     twitter: "",
     resumeUrl: "",
+    copyrightName: "",
   });
 
   const handleChange = (
@@ -108,6 +110,8 @@ export default function PortfolioCard() {
             settings?.twitter ?? "",
           resumeUrl:
             settings?.resumeUrl ?? "",
+          copyrightName:
+            settings?.copyrightName ?? "",
         });
       } catch (err) {
         console.error(err);
@@ -135,7 +139,7 @@ export default function PortfolioCard() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-xl text-white font-semibold">
             Portfolio Settings
           </h2>
 
@@ -152,6 +156,14 @@ export default function PortfolioCard() {
           value={form.portfolioTitle}
           onChange={handleChange}
           placeholder="Portfolio Title"
+          className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
+        />
+
+        <input
+          name="copyrightName"
+          value={form.copyrightName}
+          onChange={handleChange}
+          placeholder="Copyright Name (e.g. Vijay VW)"
           className="rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white"
         />
 

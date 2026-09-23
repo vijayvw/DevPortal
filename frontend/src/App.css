@@ -40,6 +40,11 @@ body {
   background: #00CC33;
 }
 
+/* Remove horizontal scrollbar */
+::-webkit-scrollbar:horizontal {
+  display: none;
+}
+
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -73,7 +78,7 @@ body {
 /* Focus Styles */
 .focus\:ring-cyber:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #00FF41, 0 0 16px rgba(0, 255, 65, 0.3);
+  box-shadow: 0 0 0 1px #00FF41, 0 0 6px rgba(0, 255, 65, 0.2);
 }
 
 /* Terminal Cursor */
@@ -164,3 +169,5 @@ body {
     opacity: 0.8;
   }
 }
+
+

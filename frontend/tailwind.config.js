@@ -52,9 +52,9 @@ module.exports = {
   },
 
   bg: {
-    page: '#000000',
-    surface: '#000000',
-    elevated: '#0A0E11',
+    page: 'var(--theme-page)',
+    surface: 'var(--theme-surface)',
+    elevated: 'var(--theme-elevated)',
   },
       },
       spacing: {

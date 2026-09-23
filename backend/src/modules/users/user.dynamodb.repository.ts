@@ -44,7 +44,7 @@ export class UserDynamoDBRepository {
         IndexName: 'GSI1',
         KeyConditionExpression: 'GSI1PK = :pk',
         ExpressionAttributeValues: {
-          ':pk': email.toLowerCase(),
+          ':pk': `USER_EMAIL#${email.toLowerCase()}`,
         },
         Limit: 1,
       }),
@@ -61,8 +61,8 @@ export class UserDynamoDBRepository {
           PK: `${PK_PREFIX}${user.id}`,
           SK: METADATA,
           ...user,
-          GSI1PK: user.email.toLowerCase(),
-          GSI1SK: `${PK_PREFIX}${user.id}`,
+          GSI1PK: `USER_EMAIL#${user.email.toLowerCase()}`,
+          GSI1SK: 'USER',
         },
         ConditionExpression: 'attribute_not_exists(PK)',
       }),
@@ -103,7 +103,7 @@ export class UserDynamoDBRepository {
     if (updates.email) {
       expressions.push('#gsi1pk = :email');
       names['#gsi1pk'] = 'GSI1PK';
-      values[':email'] = updates.email.toLowerCase();
+      values[':email'] = `USER_EMAIL#${updates.email.toLowerCase()}`;
     }
 
     const result = await dynamoDb.send(

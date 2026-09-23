@@ -110,7 +110,7 @@ export default function ContactsPage() {
       <div className="space-y-6">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Contacts</h1>
+            <h1 className="text-3xl text-white font-bold">Contacts</h1>
 
             <p className="mt-2 text-zinc-400">
               Manage messages submitted through your portfolio.
@@ -128,8 +128,8 @@ export default function ContactsPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
       <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-5">
-        <p className="text-sm text-zinc-400">Total</p>
-        <h2 className="mt-2 text-3xl font-bold">{stats.total}</h2>
+        <p className="text-sm text-purple-400">Total</p>
+        <h2 className="mt-2 text-3xl text-purple-400 font-bold">{stats.total}</h2>
       </div>
 
       <div className="rounded-xl border border-blue-800 bg-zinc-900 p-5">

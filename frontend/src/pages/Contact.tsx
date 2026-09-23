@@ -141,7 +141,7 @@ export const Contact = () => {
 
   if (settingsLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-bg-page flex items-center justify-center">
         <div className="font-mono text-primary-500">
           Loading contact information...
         </div>
@@ -150,7 +150,7 @@ export const Contact = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-bg-page">
       {/* Terminal Header */}
       <TerminalHeader
         command="ping contact.server"
@@ -168,7 +168,7 @@ export const Contact = () => {
               viewport={{ once: true }}
               className="lg:col-span-7"
             >
-              <div className="bg-bg-surface border border-neutral-700 rounded-xl p-8 shadow-card">
+              <div className="theme-panel border rounded-xl p-8 shadow-card">
                 <div className="mb-8">
                   <h2 className="font-mono text-2xl font-bold text-primary-500 mb-4">
                     Send Message
@@ -208,7 +208,7 @@ export const Contact = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className={`w-full bg-bg-elevated border ${errors.name ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors`}
+                        className={`w-full theme-input border ${errors.name ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-0.5 focus:ring-primary-500 focus:border-primary-500 transition-colors`}
                         placeholder="Your full name"
                       />
                       {errors.name && (
@@ -227,7 +227,7 @@ export const Contact = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`w-full bg-bg-elevated border ${errors.email ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors`}
+                        className={`w-full theme-input border ${errors.email ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-0.5 focus:ring-primary-500 focus:border-primary-500 transition-colors`}
                         placeholder="your.email@example.com"
                       />
                       {errors.email && (
@@ -246,7 +246,7 @@ export const Contact = () => {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className={`w-full bg-bg-elevated border ${errors.subject ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors`}
+                        className={`w-full theme-input border ${errors.subject ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-0.5 focus:ring-primary-500 focus:border-primary-500 transition-colors`}
                         placeholder="What's this about?"
                       />
                       {errors.subject && (
@@ -265,7 +265,7 @@ export const Contact = () => {
                         value={formData.message}
                         onChange={handleChange}
                         rows={6}
-                        className={`w-full bg-bg-elevated border ${errors.message ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none`}
+                        className={`w-full theme-input border ${errors.message ? 'border-red-500' : 'border-neutral-700'} rounded-md px-4 py-3 text-neutral-200 placeholder-neutral-600 font-mono focus:outline-none focus:ring-0.5 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none`}
                         placeholder="Tell me about your project or inquiry..."
                       />
                       {errors.message && (
@@ -309,7 +309,7 @@ export const Contact = () => {
               className="lg:col-span-5 space-y-8"
             >
               {/* Contact Methods */}
-              <div className="bg-[#030506] border border-neutral-700 rounded-xl p-6 transition-all duration-300 hover:border-primary-500/60 hover:shadow-[0_0_25px_rgba(0,255,80,0.08)] hover:-translate-y-1">
+              <div className="theme-panel border rounded-xl p-6 transition-all duration-300 hover:border-primary-500/60 hover:shadow-[0_0_10px_rgba(0,255,80,0.08)] hover:-translate-y-1">
                 <h3 className="font-mono text-lg font-semibold text-primary-500 mb-6">
                   Contact Methods
                 </h3>
@@ -318,7 +318,7 @@ export const Contact = () => {
                     const IconComponent = method.icon;
                     if (settingsLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-bg-page flex items-center justify-center">
         <div className="font-mono text-primary-500">
           Loading contact information...
         </div>
@@ -328,7 +328,7 @@ export const Contact = () => {
 
   return (
                       <div key={method.label} className="flex items-center space-x-4">
-                        <div className={`p-3 bg-black border border-neutral-800 rounded-lg ${method.color}`}>
+                        <div className={`theme-icon-box p-3 border rounded-lg ${method.color}`}>
                           <IconComponent size={20} />
                         </div>
                         <div>
@@ -342,16 +342,16 @@ export const Contact = () => {
               </div>
 
               {/* Availability Status */}
-              <div className="bg-[#030506] border border-neutral-700 rounded-xl p-6 transition-all duration-300 hover:border-primary-500/60 hover:shadow-[0_0_25px_rgba(0,255,80,0.08)] hover:-translate-y-1">
+              <div className="theme-availability border rounded-xl p-6 transition-all duration-300 hover:border-primary-500/60 hover:shadow-[0_0_10px_rgba(0,255,80,0.08)] hover:-translate-y-1">
                 <h3 className="font-mono text-lg font-semibold text-primary-500 mb-6">
                   Availability Status
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-3 h-3 bg-primary-500 rounded-full animate-pulse" />
-                    <span className="font-mono text-sm text-neutral-200">Available for new projects</span>
+                    <span className="theme-availability-text font-mono text-sm">Available for new projects</span>
                   </div>
-                  <div className="text-sm text-neutral-400">
+                  <div className="theme-availability-muted text-sm">
                     <div className="mb-2">Response time: Within 24 hours</div>
                     <div>Time zone: IST (UTC+5:30)</div>
                   </div>
@@ -359,7 +359,7 @@ export const Contact = () => {
               </div>
 
               {/* Social Links */}
-              <div className="bg-[#030506] border border-neutral-700 rounded-xl p-6 transition-all duration-300 hover:border-primary-500/60 hover:shadow-[0_0_25px_rgba(0,255,80,0.08)] hover:-translate-y-1">
+              <div className="theme-panel border rounded-xl p-6 transition-all duration-300 hover:border-primary-500/60 hover:shadow-[0_0_10px_rgba(0,255,80,0.08)] hover:-translate-y-1">
                 <h3 className="font-mono text-lg font-semibold text-primary-500 mb-6">
                   Connect With Me
                 </h3>
@@ -368,7 +368,7 @@ export const Contact = () => {
                     const IconComponent = link.icon;
                     if (settingsLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-bg-page flex items-center justify-center">
         <div className="font-mono text-primary-500">
           Loading contact information...
         </div>
@@ -382,7 +382,7 @@ export const Contact = () => {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center p-4 bg-black border border-neutral-800 rounded-lg text-neutral-400 ${link.color} transition-all duration-200 hover:scale-105 hover:shadow-card`}
+                        className={`flex flex-col items-center p-4 bg-bg-page border border-neutral-800 rounded-lg text-neutral-400 ${link.color} transition-all duration-200 hover:scale-105 hover:shadow-card`}
                       >
                         <IconComponent size={24} className="mb-2" />
                         <span className="text-xs font-mono">{link.name}</span>
@@ -397,7 +397,7 @@ export const Contact = () => {
       </section>
 
       {/* Terminal-style footer message */}
-      <section className="py-24 bg-black">
+      <section className="py-24 bg-bg-page">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

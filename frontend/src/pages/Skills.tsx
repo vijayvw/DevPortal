@@ -294,8 +294,6 @@ export const Skills = () => {
                 category?.name ?? skill.category
               }`,
               `Proficiency: ${skill.proficiency}%`,
-              '',
-              `Icon: ${skill.iconUrl ?? 'n/a'}`,
             ];
           } else {
             output = [
@@ -335,7 +333,7 @@ export const Skills = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-bg-page">
 
       {/* Terminal Header */}
       <TerminalHeader
@@ -357,7 +355,7 @@ export const Skills = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-mono text-3xl md:text-4xl font-bold text-primary-500 mb-4">
+            <h2 className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold text-primary-500 mb-4">
               Technical Expertise
             </h2>
 
@@ -435,7 +433,7 @@ export const Skills = () => {
                         viewport={{
                           once: true,
                         }}
-                        className="bg-bg-surface border border-neutral-700 rounded-xl overflow-hidden"
+                        className="bg-bg-surface border border-neutral-700 rounded-xl overflow-hidden transition-all duration-300 hover:border-primary-500/50 hover:shadow-[0_0_12px_rgba(0,255,100,0.10)] hover:-translate-y-0.5"
                       >
 
                         {/* Category Header */}
@@ -444,7 +442,7 @@ export const Skills = () => {
                           <div className="flex items-center space-x-3">
 
                             <div
-                              className={`flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-800 ${color}`}
+                              className={`theme-skill-category-icon flex h-10 w-10 items-center justify-center rounded-lg ${color}`}
                             >
 
                               {isCustomIcon ? (
@@ -659,7 +657,7 @@ export const Skills = () => {
       </section>
 
       {/* Interactive Terminal */}
-      <section className="py-24 bg-black">
+      <section className="py-24 bg-bg-page">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -674,7 +672,7 @@ export const Skills = () => {
             className="text-center mb-16"
           >
 
-            <h2 className="font-mono text-3xl md:text-4xl font-bold text-primary-500 mb-4">
+            <h2 className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold text-primary-500 mb-4">
               Interactive Skill Explorer
             </h2>
 

@@ -1,5 +1,8 @@
+import { useState } from "react";
 import {
   useContact,
+  useDeleteContact,
+  useReplyToContact,
   useMarkReplied,
   useUpdateContactStatus,
 } from "../../queries/useContacts";
@@ -17,20 +20,56 @@ export default function ContactDrawer({
 
   const updateStatus = useUpdateContactStatus();
   const markReplied = useMarkReplied();
+  const deleteContact = useDeleteContact();
+  const replyContact = useReplyToContact();
+
+  const [replyMode, setReplyMode] = useState(false);
+  const [replyMessage, setReplyMessage] = useState("");
 
   if (!contactId) return null;
+
+  const handleReply = () => {
+    if (!data || !replyMessage.trim()) return;
+
+    replyContact.mutate(
+      {
+        id: data.id,
+        message: replyMessage.trim(),
+      },
+      {
+        onSuccess: () => {
+          setReplyMessage("");
+          setReplyMode(false);
+        },
+      },
+    );
+  };
+
+  const handleDelete = () => {
+    if (!data) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to permanently delete the message from ${data.name}?`,
+    );
+
+    if (!confirmed) return;
+
+    deleteContact.mutate(data.id, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
+  };
 
   return (
     <div
       className="fixed inset-0 z-50 bg-black/60"
       onClick={onClose}
     >
-      
       <div
         className="absolute right-0 top-0 h-full w-[540px] overflow-y-auto border-l border-zinc-800 bg-zinc-900 p-8"
         onClick={(e) => e.stopPropagation()}
       >
-
         <button
           onClick={onClose}
           className="mb-8 rounded-lg bg-zinc-800 px-4 py-2 hover:bg-zinc-700"
@@ -55,7 +94,6 @@ export default function ContactDrawer({
               </div>
 
               <div className="flex-1">
-
                 <h2 className="text-2xl font-bold">
                   {data.name}
                 </h2>
@@ -66,11 +104,8 @@ export default function ContactDrawer({
                 >
                   {data.email}
                 </a>
-
               </div>
-
             </div>
-
 
             <div className="mt-8 grid grid-cols-2 gap-6">
               <div>
@@ -92,7 +127,6 @@ export default function ContactDrawer({
                   {new Date(data.createdAt).toLocaleString()}
                 </p>
               </div>
-
             </div>
 
             <div className="mt-8">
@@ -110,33 +144,99 @@ export default function ContactDrawer({
                 Message
               </p>
 
-              <div className="min-h-[180px] rounded-xl border border-zinc-800 bg-black/40 p-5 text-zinc-200 whitespace-pre-wrap leading-7">
+              <div className="min-h-[180px] whitespace-pre-wrap rounded-xl border border-zinc-800 bg-black/40 p-5 leading-7 text-zinc-200">
                 {data.message}
               </div>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-3">
-              
-                {data.status === "UNREAD" && (
+            {replyMode && (
+              <div className="mt-8 rounded-xl border border-zinc-800 bg-black/30 p-5">
+                <div className="mb-4">
+                  <p className="text-sm font-medium text-zinc-300">
+                    Reply to
+                  </p>
+
+                  <p className="text-sm text-blue-400">
+                    {data.email}
+                  </p>
+                </div>
+
+                <textarea
+                  value={replyMessage}
+                  onChange={(e) => setReplyMessage(e.target.value)}
+                  placeholder="Write your reply..."
+                  rows={8}
+                  className="w-full resize-none rounded-lg border border-zinc-700 bg-zinc-900 p-4 text-white placeholder-zinc-500 outline-none focus:border-blue-500"
+                />
+
+                <div className="mt-4 flex gap-3">
                   <button
-                    disabled={updateStatus.isPending}
-                    onClick={() =>
-                      updateStatus.mutate(
-                        {
-                          id: data.id,
-                          status: "READ",
-                        },
-                        {
-                          onSuccess: () => onClose(),
-                        }
-                      )
-                    }
-                    className="rounded-lg bg-green-600 px-4 py-2 transition hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="button"
+                    onClick={() => {
+                      setReplyMode(false);
+                      setReplyMessage("");
+                    }}
+                    disabled={replyContact.isPending}
+                    className="rounded-lg bg-zinc-700 px-4 py-2 transition hover:bg-zinc-600 disabled:opacity-50"
                   >
-                    {updateStatus.isPending ? "Updating..." : "Mark Read"}
+                    Cancel
                   </button>
+
+                  <button
+                    type="button"
+                    onClick={handleReply}
+                    disabled={
+                      replyContact.isPending ||
+                      !replyMessage.trim()
+                    }
+                    className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {replyContact.isPending
+                      ? "Sending..."
+                      : "Send Reply"}
+                  </button>
+                </div>
+
+                {replyContact.isError && (
+                  <p className="mt-3 text-sm text-red-400">
+                    Failed to send reply. Please try again.
+                  </p>
                 )}
-      
+              </div>
+            )}
+
+            <div className="mt-10 flex flex-wrap gap-3">
+              {!replyMode && (
+                <button
+                  type="button"
+                  onClick={() => setReplyMode(true)}
+                  className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500"
+                >
+                  Reply
+                </button>
+              )}
+
+              {data.status === "UNREAD" && (
+                <button
+                  disabled={updateStatus.isPending}
+                  onClick={() =>
+                    updateStatus.mutate(
+                      {
+                        id: data.id,
+                        status: "READ",
+                      },
+                      {
+                        onSuccess: () => onClose(),
+                      },
+                    )
+                  }
+                  className="rounded-lg bg-green-600 px-4 py-2 transition hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {updateStatus.isPending
+                    ? "Updating..."
+                    : "Mark Read"}
+                </button>
+              )}
 
               {data.status === "READ" && (
                 <button
@@ -148,7 +248,9 @@ export default function ContactDrawer({
                   }
                   className="rounded-lg bg-purple-600 px-4 py-2 transition hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {markReplied.isPending ? "Updating..." : "Mark Replied"}
+                  {markReplied.isPending
+                    ? "Updating..."
+                    : "Mark Replied"}
                 </button>
               )}
 
@@ -157,7 +259,7 @@ export default function ContactDrawer({
                   disabled={updateStatus.isPending}
                   onClick={() => {
                     const confirmed = window.confirm(
-                      "Are you sure you want to archive this message?"
+                      "Are you sure you want to archive this message?",
                     );
 
                     if (!confirmed) return;
@@ -169,15 +271,27 @@ export default function ContactDrawer({
                       },
                       {
                         onSuccess: () => onClose(),
-                      }
+                      },
                     );
                   }}
                   className="rounded-lg bg-zinc-700 px-4 py-2 transition hover:bg-zinc-600 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {updateStatus.isPending ? "Archiving..." : "Archive"}
+                  {updateStatus.isPending
+                    ? "Archiving..."
+                    : "Archive"}
                 </button>
               )}
 
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={deleteContact.isPending}
+                className="rounded-lg bg-red-600 px-4 py-2 font-medium transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {deleteContact.isPending
+                  ? "Deleting..."
+                  : "Delete"}
+              </button>
             </div>
           </>
         )}

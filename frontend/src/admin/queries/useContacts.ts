@@ -9,6 +9,8 @@ import {
   getAdminContact,
   updateContactStatus,
   markContactReplied,
+  deleteAdminContact,
+  replyToAdminContact,
 } from "../../api/services/adminContacts.service";
 
 export function useContacts() {
@@ -63,6 +65,48 @@ export function useMarkReplied() {
 
       queryClient.invalidateQueries({
         queryKey: ["admin-contact", id],
+      });
+    },
+  });
+}
+
+export function useDeleteContact() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteAdminContact,
+
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({
+        queryKey: ["admin-contacts"],
+      });
+
+      queryClient.removeQueries({
+        queryKey: ["admin-contact", id],
+      });
+    },
+  });
+}
+
+export function useReplyToContact() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      message,
+    }: {
+      id: string;
+      message: string;
+    }) => replyToAdminContact(id, message),
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["admin-contacts"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["admin-contact", variables.id],
       });
     },
   });

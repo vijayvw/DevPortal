@@ -102,6 +102,7 @@ export interface SkillDto {
   proficiency: number;
   yearsExperience: number | null;
   priority: number;
+  featured: boolean;
 }
 
 export interface CaseStudyListItemDto {
